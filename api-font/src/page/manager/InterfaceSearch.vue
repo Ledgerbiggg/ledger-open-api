@@ -121,7 +121,7 @@ const search = () => {
   console.log("param==========", param)
 
   store.commit("setSearchParams2", param)
-
+  
   ElMessage.success("搜索成功")
 }
 const getOne=(arr)=>{
