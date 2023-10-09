@@ -60,6 +60,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
                     filterChain.doFilter(request, response);
                     response.setHeader(tokenHeader, tokenHead + " " + JwtUtil.refreshToken(token, secret));
                     return;
+
                 }
             }
         }
