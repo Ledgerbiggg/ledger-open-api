@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ledger.api_order.mapper.OrdersMapper">
+
+    <resultMap id="BaseResultMap" type="com.ledger.api_order.model.domain.Orders">
+        <id property="id" column="id" jdbcType="VARCHAR"/>
+        <result property="user_id" column="user_id" jdbcType="VARCHAR"/>
+        <result property="order_date" column="order_date" jdbcType="TIMESTAMP"/>
+        <result property="trade_date" column="trade_date" jdbcType="TIMESTAMP"/>
+        <result property="order_status" column="order_status" jdbcType="BOOLEAN"/>
+        <result property="total_amount" column="total_amount" jdbcType="DECIMAL"/>
+        <result property="payment_method" column="payment_method" jdbcType="VARCHAR"/>
+        <result property="subject" column="subject" jdbcType="VARCHAR"/>
+        <result property="price_id" column="price_id" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id
+        ,user_id,order_date,trade_date,
+        order_status,total_amount,payment_method,subject,price_id
+    </sql>
+    <select id="getOrderList" resultType="com.ledger.api_order.model.vo.OrdersListRequest">
+        SELECT o.id,
+        o.total_amount,
+        o.subject,
+        o.order_status,
+        o.order_date,
+        o.trade_date
+        ,p.count,
+        m.method_name
+        FROM orders o
+        LEFT JOIN paymethd m
+        ON o.payment_method=m.id
+        LEFT JOIN price p
+        ON o.price_id=p.id
+        WHERE o.user_id=#{id}
+        <if test="orderSearchRequest != null">
+            <if test="orderSearchRequest.subject != null and orderSearchRequest.subject.length()>0">
+                AND o.subject = #{orderSearchRequest.subject}
+            </if>
+            <if test="orderSearchRequest.traceNo != null and orderSearchRequest.traceNo.length()>0">
+                AND o.id = #{orderSearchRequest.traceNo}
+            </if>
+            <if test="orderSearchRequest.totalAmount != null and orderSearchRequest.totalAmount>0">
+                AND o.total_amount = #{orderSearchRequest.totalAmount}
+            </if>
+            <if test="orderSearchRequest.orderState != null">
+                AND o.order_status = #{orderSearchRequest.orderState}
+            </if>
+        </if>
+        ORDER BY order_date DESC
+    </select>
+</mapper>

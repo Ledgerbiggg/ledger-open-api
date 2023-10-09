@@ -1,0 +1,47 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver  # MySQL数据库驱动类名
+    url: jdbc:mysql://106.54.9.19:3306/open-api?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC # MySQL数据库连接URL，根据实际情况修改主机名和端口号
+    username: root  # MySQL数据库用户名
+    password: biaoge666  # MySQL数据库密码
+    # 连接池配置
+    hikari:
+      maximum-pool-size: 10
+      idle-timeout: 30000
+
+  application:
+    # 服务名称
+    name: api-userInfo
+  cloud:
+    nacos:
+      discovery:
+        # nacos注册中心地址
+        server-addr: 106.54.9.19:8848
+        namespace: 81ae9a71-0a21-4992-9be9-7b145c5fa604
+
+server:
+  port: 8000
+
+mybatis-plus:
+  configuration:
+    # 配置 MyBatis-Plus 的日志实现为 org.apache.ibatis.logging.stdout.StdOutImpl
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: false
+  # 指定 MyBatis 的类型别名包，用于自动注册别名
+  type-aliases-package: com.ledger.api_user.model.domain
+  # 指定 MyBatis Mapper XML 文件的位置模式，用于映射 SQL 语句和 Java 接口
+  mapper-locations: classpath*:mapper/*.xml
+
+jwt:
+  # JWT存储的请求头
+  tokenHeader: Authorization
+  # JWT 加解密使用的密钥
+  secret: ledger
+  # JWT的超期限时间（60*60*24）
+  expiration: 604800
+  # JWT 负载中拿到开头
+  tokenHead: Bearer
+
+
+
+

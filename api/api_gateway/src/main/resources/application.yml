@@ -1,0 +1,67 @@
+server:
+  port: 80
+
+spring:
+  application:
+    # 服务名称
+    name: api-gateway
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver  # MySQL数据库驱动类名
+    url: jdbc:mysql://106.54.9.19:3306/open-api?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC # MySQL数据库连接URL，根据实际情况修改主机名和端口号
+    username: root  # MySQL数据库用户名
+    password: biaoge666  # MySQL数据库密码
+
+  cloud:
+    nacos:
+      # nacos地址
+      server-addr: 106.54.9.19:8848
+      discovery:
+        # 命名空间
+        namespace: 81ae9a71-0a21-4992-9be9-7b145c5fa604
+    gateway:
+      globalcors:
+        add-to-simple-url-handler-mapping: true # 解决options请求被拦截问题
+        corsConfigurations:
+          '[/**]': # 匹配所有的请求路径
+            allowedOrigins: # 允许哪些网站的跨域请求
+              - "*" # 允许所有
+            allowedMethods: # 允许的跨域ajax的请求方式
+              - "GET"
+              - "POST"
+              - "DELETE"
+              - "PUT"
+              - "OPTIONS"
+            allowedHeaders: "*" # 允许在请求中携带的头信息
+            allowCredentials: true # 是否允许携带cookie
+            maxAge: 360000 # 这次跨域检测的有效期
+      routes:
+        - id: user-service
+          uri: lb://api-userInfo # 路由的目标地址 http就是固定地址
+          predicates:
+            - Path=/api/user/** # 这个是匹配规则，只要以/user/开头就会符合要求
+        - id: interface-service
+          uri: lb://api-interfaceInfo # 路由的目标地址 http就是固定地址
+          predicates:
+            - Path=/api/interfaceInfo/** # 这个是匹配规则，只要以/user/开头就会符合要求
+        - id: order-service
+          uri: lb://api-order # 路由的目标地址 http就是固定地址
+          predicates:
+            - Path=/api/order/** # 这个是匹配规则，只要以/user/开头就会符合要求
+
+      default-filters:
+        - RewritePath=/api/(?<segment>.*), /$\{segment} # 默认的过滤器,将所有的请求的/api去掉
+
+
+jwt:
+  # JWT存储的请求头
+  tokenHeader: Authorization
+  # JWT 加解密使用的密钥
+  secret: ledger
+  # JWT的超期限时间（60*60*24）
+  expiration: 604800
+  # JWT 负载中拿到开头
+  tokenHead: Bearer
+
+
+
+

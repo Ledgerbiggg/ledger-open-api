@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ledger.api_interface.mapper.InterfaceInfoMapper">
+
+    <resultMap id="BaseResultMap" type="com.ledger.api_interface.model.domain.InterfaceInfo">
+            <id property="id" column="id" jdbcType="VARCHAR"/>
+            <result property="name" column="name" jdbcType="VARCHAR"/>
+            <result property="description" column="description" jdbcType="VARCHAR"/>
+            <result property="url" column="url" jdbcType="VARCHAR"/>
+            <result property="status" column="status" jdbcType="INTEGER"/>
+            <result property="is_delete" column="is_delete" jdbcType="TINYINT"/>
+            <result property="update_time" column="update_time" jdbcType="TIMESTAMP"/>
+            <result property="create_time" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="method" column="method" jdbcType="VARCHAR"/>
+            <result property="img_url" column="img_url" jdbcType="VARCHAR"/>
+            <result property="call_count" column="call_count" jdbcType="INTEGER"/>
+            <result property="resp_type" column="resp_type" jdbcType="VARCHAR"/>
+            <result property="consume" column="consume" jdbcType="INTEGER"/>
+            <result property="example" column="example" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,name,description,
+        url,request_header,response_header,
+        status,is_delete,update_time,
+        create_time,method,img_url,
+        call_count,resp_type,consume,example
+    </sql>
+    <insert id="addCount">
+        UPDATE interface_info
+        SET call_count=call_count+1
+        WHERE id=#{interfaceId}
+    </insert>
+</mapper>

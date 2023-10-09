@@ -1,0 +1,59 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver  # MySQL数据库驱动类名
+    url: jdbc:mysql://106.54.9.19:3306/open-api?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC # MySQL数据库连接URL，根据实际情况修改主机名和端口号
+    username: root  # MySQL数据库用户名
+    password: biaoge666  # MySQL数据库密码
+  application:
+    # 服务名称
+    name: api-order
+  cloud:
+    nacos:
+      discovery:
+        # nacos注册中心地址
+        server-addr: 106.54.9.19:8848
+        namespace: 81ae9a71-0a21-4992-9be9-7b145c5fa604
+  jackson:
+    default-property-inclusion: non_null
+#    hikari:
+#      maximum-pool-size: 20  # 连接池最大连接数
+#      minimum-idle: 5  # 连接池最小空闲连接数
+#      connection-timeout: 30000  # 连接超时时间，30秒
+#      idle-timeout: 600000  # 空闲连接超时时间，10分钟
+#      max-lifetime: 1800000  # 连接最大生存时间，30分钟
+
+#redis:
+#  host: localhost  # Redis 服务器主机名
+#  port: 6379       # Redis 服务器端口号
+#  password: 123456 # Redis 访问密码
+#  database: 0      # Redis 数据库编号
+
+server:
+  port: 11000       # Spring Boot 应用服务器端口号
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    # 配置 MyBatis-Plus 的日志实现为 org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: false
+  type-aliases-package: com.ledger.api_interface.model.domain
+  # 指定 MyBatis 的类型别名包，用于自动注册别名
+  mapper-locations: classpath*:mapper/*.xml
+  # 指定 MyBatis Mapper XML 文件的位置模式，用于映射 SQL 语句和 Java 接口
+
+jwt:
+  # JWT存储的请求头
+  tokenHeader: Authorization
+  # JWT 加解密使用的密钥
+  secret: ledger
+  # JWT的超期限时间（60*60*24）
+  expiration: 604800
+  # JWT 负载中拿到开头
+  tokenHead: Bearer
+
+
+alipay:
+  appId: 9021000129615874
+  appPrivateKey: MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCSCRKeD/xrioULa3hLN34gmuXrzEA1B3GLTOCwXcysvG4NxxIhuREP+zgv6AOXSTehmtkxWm0dC3AfKj6agNuq872pjjSbt4BE/vHtxic3KqwgPVaHc8WPsXpwtGFd/HDtCuWjfsQo+ioujZlRUyNBfVGhxS024d+z3GR1TL0eHNTN1OCx+tWqQpgFkYcmGU0bQN7B6L64g0VrB4tkT6UOpzwlk0C3tLoBbzDaLGVT6zxK9KAGsslraTjQlPQo75bsYotnGeNVoenjZodPEkM4QIDMgfT03MnjzbnkrHhYSYTA1grVMhIYoxH/Doocu4MGgh5+AXCZtq4lMc2ZvnwjAgMBAAECggEAHxNjLNOGCXRun2F9NbRXWKTdrHHIcABnfxca8SzksxVd7fygtSBmqxnwePFMYlMoTXFgKoptkbKvZ1JcBBDLrfM0NvKV61T/LK971/dEvQ6Nlka3NRfDwLIptfYMii1/8lFRUJtXLskdVM65A39Hj1YVmvEUkAs8yU9q6TMtQ0zYProY+bRoUIOUCB/bZNuhV6Phwek5mzjHzHHCbxDi6i9dRagdRQsvda510XJc33i5q2b0Ahdq2UVHtt9zYWdUgFfWXq3BQ2mqKLD7TY44TsKh1cH6+UzYA86eapQBt1MwdCzDXLeFStX6zxBjsnrkMSwBHw6Mig8pmgN8/NYr8QKBgQDeHf3VvNYXDpfAqcV2I0593cLTv0x4HMKSGBC6RwecxF76ZOgDxn0lC9kQit7t/jvmhSF+h3zhRyibyBNoHMawB+z4w7LPFs+nOHMT3qu8S7OKEgLUFLv5da37T/z6RALp4nEaUW+v/QDuk5PJs4UWEKE1VODoa0OIVJsdxSyPJQKBgQCoT/naK2quuytKRp2iH9mjTt8yXtDIyN2vX5CXdbLnhcCTT2uiUoj3JpmMuZ7Hl6plAZ5r9+7/JebxLTwCBwsqhhm9i94HxzrdHOyMinm7AHfz98Ynm3ECDeMzV8662f7fKqlhkEyIwp4bQBlytdJoL8V7E1NZp6Ue0VbvQ7c/pwKBgHxv+QGBpb+NIV+CvWmOJi9FyhyvE7xHAIqwiM6TdKRTL5LAbWuQDBRxKs6lvnc+83gWJcmpRkE/iHSeBqFRXc7I4e4MVWTHttZMPcxn93aqQo+bv5Hpe9YqI6qkCWp8J9W4Uv0XmqbR62+9phJeTLUr4+TpBIexcEg0fiKTkH8xAoGAXbVpXlad5vq+d3Qpf4JMIehfzCOOCrwK8QE795fIK68EMQAe5RkeuLv88aTHCkkezW3BTkuT/OqVUeHlbxuM0/gljKq6y4nY9BKOgRD4BW2VW3ewE40vtf0VahiROOb2SDnwZCl68wmoDXP6tysUIn22bXetCFWWUTosNLp25DECgYEAz9MsLPGreU1dinG/iR008OF4oK+naMUhfvo+iFjghVcYKZmbeXByB57PW+7t0JliE0wxmfXl4N/r58K37YKM+Ip5Tw75Ja0bzw8qiWknGw3ymRrMpUnqC127YwwjeWRGHmJHpyNQKoEvj+YWySHvoRqRM20JOcSQc2XIjzpzEkc=
+  alipayPublicKey: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApkbV469EqyWvTR2Vgn60h29vIju1qpMJgPGCRuJd2iI4yDkJ5j8HzLE0TKxSXwg2+y0saQTEO4zoqhqbtqL9qHQOAaYkkKi09gELl5cyOUSO+Sh17xemxwZyAxHSLbU4MkBym/MTR5MkSzAOXbxUHwRx6GdbpuSatz252f4fmtDfJudteDLfVQJyFcergOLch5sx06JvXnju2xM0N2NZfsrKr8b7XRacXmjO+6/S9AkhyEZbpCA24EJCPgzRmGNvvBu/w148cY6u2ApPonTBiPwIJx1UzyGLKzz7yB4J7wXI4N3mIlQTdXQYjcw+tOd5sHc1iWNygTTV6GPJAMWCRwIDAQAB
+  notifyUrl: http://24kgqq.natappfree.cc/api/order/notify
