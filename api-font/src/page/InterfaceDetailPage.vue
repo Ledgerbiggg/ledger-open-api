@@ -1,61 +1,55 @@
 <template>
   <div class="apiDetail">
     <div class="title">
-      订单详情
-      <span class="goPayment" v-if="interfaceDetail.status==='未支付'">
-        <el-button type="primary" @click="goPayment">
-          <div class="text">
-            去支付
-          </div>
-        </el-button>
-      </span>
+      接口详情
     </div>
     <div class="detail">
       <div class="line">
-        <div class="label">订单名称</div>
-        <div class="context">{{ interfaceDetail.subject }}</div>
+        <div class="label">接口名称</div>
+        <div class="context">{{ interfaceDetail.name }}</div>
       </div>
       <div class="line">
-        <div class="label">订单金额(元)</div>
-        <div class="context">{{ interfaceDetail.total_amount }}</div>
+        <div class="label">接口消费</div>
+        <div class="context">{{ interfaceDetail.consume }}</div>
       </div>
       <div class="line">
-        <div class="label">支付类型</div>
+        <div class="label">url</div>
+        <div class="context">{{ interfaceDetail.url }}</div>
+      </div>
+
+      <div class="line">
+        <div class="label">调用次数</div>
+        <div class="context">{{interfaceDetail.call_count}}</div>
+      </div>
+      <div class="line">
+        <div class="label">请求体格式</div>
+        <div class="context">{{interfaceDetail.resp_type}}</div>
+      </div>
+      <div class="line">
+        <div class="label">接口id</div>
+        <div class="context">{{ interfaceDetail.id }}</div>
+      </div>
+      <div class="line">
+        <div class="label">调用方法</div>
         <div class="context ">
           <el-tag class="ml-2"
-                  :type="interfaceDetail.tag==='未选择支付方式' ? 'info' :
-                  interfaceDetail.tag==='支付宝' ? '' : 'success'">
+                  :type="interfaceDetail.tag==='GET' ? '' : 'success'">
             {{ interfaceDetail.tag }}
           </el-tag>
         </div>
       </div>
       <div class="line">
-        <div class="label">订单状态</div>
+        <div class="label">接口图片</div>
+        <div class="context"><img width="80" :src="interfaceDetail.img_url" alt="图片出错"/></div>
+      </div>
+      <div class="line">
+        <div class="label">示例</div>
         <div class="context">
-          <el-tag class="ml-2" :type="interfaceDetail.status==='未支付'?'danger':'success'">
-            {{ interfaceDetail.status }}
-          </el-tag>
-        </div>
-      </div>
-      <div class="line">
-        <div class="label">增加积分数</div>
-        <div class="context">{{ interfaceDetail.count }}</div>
-      </div>
-      <div class="line">
-        <div class="label">支付时间</div>
-        <div class="context">{{ interfaceDetail.trade_date_str ? interfaceDetail.trade_date_str : '暂无' }}</div>
-      </div>
-      <div class="line">
-        <div class="label">创建时间</div>
-        <div class="context">{{ interfaceDetail.order_date_str }}</div>
-      </div>
-      <div class="line">
-        <div class="label">商品描述</div>
-        <div class="context">{{ interfaceDetail.subject }}</div>
-      </div>
-      <div class="line">
-        <div class="label">订单号</div>
-        <div class="context">{{ interfaceDetail.id }}</div>
+          <v-md-preview
+              :text="'```json\n'+ JSON.stringify(interfaceDetail.example, null, 2)"
+              @copy-code-success="handleCopyCodeSuccess">
+          </v-md-preview>
+          </div>
       </div>
     </div>
   </div>
@@ -77,28 +71,40 @@
 <script setup>
 import {onMounted, ref} from "vue";
 import store from "@/store/store";
-import {useRouter} from "vue-router";
+import {ElMessage} from "element-plus";
+// import {useRouter} from "vue-router";
 
 const interfaceDetail = ref({})
-const router = useRouter()
+// const router = useRouter()
 
 onMounted(() => {
-  interfaceDetail.value = store.state.orderDetail
+  interfaceDetail.value = store.state.interfaceDetail
 })
 
-const goPayment=()=>{
-  store.commit("setOrder",{
-    subject: interfaceDetail.value.subject,
-    totalAmount: interfaceDetail.value.total_amount,
-    traceNo: interfaceDetail.value.id
-  })
-  router.push({
-    name: "OrderDetail",
-  })
+const handleCopyCodeSuccess=()=>{
+  ElMessage.success("复制成功")
 }
 
 
+// const goPayment = () => {
+//   store.commit("setOrder", {
+//     subject: interfaceDetail.value.subject,
+//     totalAmount: interfaceDetail.value.total_amount,
+//     traceNo: interfaceDetail.value.id
+//   })
+//   router.push({
+//     name: "OrderDetail",
+//   })
+// }
+
+
 </script>
+<style>
+.apiDetail .github-markdown-body{
+  padding:24px 0 0 0;
+  width: 290px;
+}
+</style>
 <style lang="less" scoped>
 @import "@/theme/style.less";
 
@@ -127,7 +133,8 @@ const goPayment=()=>{
       left: 97%;
       transform: translateX(-100%);
     }
-    .text{
+
+    .text {
       font-weight: 600;
       font-size: 15px;
     }
@@ -153,6 +160,7 @@ const goPayment=()=>{
       font-size: 14px;
       line-height: 1.5714285714285714;
       text-align: start;
+      width: 17%;
       padding-left: 2vw;
 
     }

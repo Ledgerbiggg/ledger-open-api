@@ -48,7 +48,5 @@ public class ResUtils {
         } catch (JSONException e) {
             return JSON.parseObject(res.getBody(), JSONArray.class);
         }
-
-
     }
 }

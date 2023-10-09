@@ -43,7 +43,16 @@ export default createStore({
         search2:0,
         searchParams2:{
 
-        }
+        },
+        //订单详情
+        orderDetail: {
+
+        },
+        //接口详情
+        interfaceDetail:{
+
+        },
+
 
     },
     mutations: {
@@ -77,6 +86,12 @@ export default createStore({
         setRole(state, data){
             state.userInfo.role = data
         },
+        setOrderDetail(state, data){
+            state.orderDetail = data
+        },
+        setInterfaceDetail(state, data){
+            state.interfaceDetail = data
+        }
 
     },
     actions: {

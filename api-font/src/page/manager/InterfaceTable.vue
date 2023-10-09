@@ -3,23 +3,24 @@
     <!--    <el-button @click="resetDateFilter">reset date filter</el-button>-->
     <!--    <el-button @click="clearFilter">reset all filters</el-button>-->
     <el-table height="55vh" ref="tableRef" row-key="date" :data="tableData" style="width: 100%;overflow: hidden">
-      <el-table-column align="center" prop="id" label="订单号" width="220">
+      <el-table-column align="center" prop="id" label="接口号" width="160">
         <template #default="scope">
           <div class="centered-tag">
-            <span>{{ scope.row.id.slice(0, 10) }}...{{ scope.row.id.slice(25) }}</span>
+            <span>{{ scope.row.id.slice(0, 7) }}...{{ scope.row.id.slice(30) }}</span>
           </div>
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="subject" label="订单名称" width="120"/>
-      <el-table-column align="center" prop="status" label="订单状态" width="120"/>
+      <el-table-column align="center" prop="name" label="接口名称" width="160"/>
+      <el-table-column align="center" prop="status" label="接口状态" width="120"/>
+      <el-table-column align="center" prop="consume" label="接口消费" width="120"/>
       <el-table-column
           align="center"
           prop="tag"
-          label="支付类型"
+          label="请求类型"
           width="115"
           :filters="[
-        { text: '微信', value: '微信' },
-        { text: '支付宝', value: '支付宝' },
+        { text: 'GET', value: 'GET' },
+        { text: 'POST', value: 'POST' },
       ]"
           :filter-method="filterTag"
           filter-placement="bottom-end"
@@ -28,50 +29,41 @@
         <template #default="scope">
           <div class="centered-tag">
             <el-tag
-                :type="scope.row.tag === '支付宝' ? '' : 'success'"
+                :type="scope.row.tag === 'GET' ? '' : 'success'"
                 disable-transitions
             >{{ scope.row.tag }}
             </el-tag>
           </div>
         </template>
       </el-table-column>
-      <el-table-column align="center" sortable prop="total_amount" label="订单金额" width="120"/>
-      <el-table-column align="center" prop="count" label="增加积分数" width="120"/>
-      <el-table-column align="center" prop="subject" label="订单描述" width="150"/>
+      <el-table-column align="center" sortable prop="description" label="描述" width="120"/>
+      <el-table-column align="center" prop="url" label="url" width="190"/>
+      <el-table-column align="center" prop="call_count" label="请求次数" width="150"/>
       <el-table-column
           align="center"
-          label="支付时间"
-          width="110"
-          column-key="date"
-      >
-        <template #default="scope">
-          <div v-if="scope.row.trade_date_str">
-            {{ scope.row.trade_date_str }}
-          </div>
-          <div v-else style="color: red;font-weight: 600">
-            {{ '暂未支付' }}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column
-          align="center"
-          prop="order_date_str"
-          label="创建时间"
-          sortable
-          width="110"
-          column-key="date"
-      />
-      <el-table-column
-          align="center"
-          label="操作" width="120">
+          label="操作" width="170">
         <template #default="scope">
           <!-- 这里是自定义的 HTML 内容 -->
-          <span>
+          <span class="btn">
             <el-button
                 size="small"
                 type="primary"
                 @click="handleEdit(scope.row)"
                 :icon="View"/>
+          </span>
+          <span class="btn">
+            <el-button
+                size="small"
+                type="primary"
+                @click="handleEdit(scope.row)"
+                :icon="Edit"/>
+          </span>
+          <span class="btn">
+            <el-button
+                size="small"
+                type="primary"
+                @click="handleEdit(scope.row)"
+                :icon="Delete"/>
           </span>
         </template>
       </el-table-column>
@@ -81,9 +73,11 @@
 <script setup>
 import {
   View,
+  Edit,
+  Delete,
 } from '@element-plus/icons-vue'
 import {computed, onMounted, ref, watch} from 'vue';
-// import http from "@/js/http";
+import http from "@/js/http";
 import {useRouter} from "vue-router";
 import store from "@/store/store";
 
@@ -95,15 +89,27 @@ const searchParams = computed(() => {
 })
 
 onMounted(() => {
-  getOrderList()
+  getOrderList({})
 })
 
 
-const getOrderList = () => {
-  // http.get("/order/getOrderList", params).then(res => {
-  //   console.log("getOrderList", res.data.data)
-  //   tableData.value = res.data.data
-  // })
+const getOrderList = (params) => {
+  console.log("params", params)
+  Object.keys(params).forEach(key=>{
+    if(!params[key]){
+      if(params[key] !== 0){
+        params[key] = null
+      }
+    }
+  })
+  console.log("params", params)
+  http.get("/interfaceInfo/admin/getInterfaceList", params).then(res => {
+    console.log("getInterfaceList", res.data.data)
+    res.data.data.forEach(item=>{
+      item.tag=item.method;
+    })
+    tableData.value = res.data.data
+  })
 };
 
 const filterTag = (value, row) => {
@@ -127,9 +133,9 @@ watch(searchParams, () => {
 const handleEdit = (row) => {
   // 编辑按钮的点击事件处理逻辑
   console.log('编辑', row)
+  store.commit("setInterfaceDetail", row)
   router.push({
-    path: '/orderDetailPage',
-    query: row
+    path: '/admin/interfaceDetailPage',
   })
 }
 
@@ -140,5 +146,8 @@ const handleEdit = (row) => {
   display: flex;
   justify-content: center; /* 水平居中对齐 */
   align-items: center; /* 垂直居中对齐 */
+}
+.btn{
+  margin: 0 2px;
 }
 </style>

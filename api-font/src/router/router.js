@@ -60,6 +60,12 @@ const routes = [
                 component: () => import('@/page/InterfaceManger.vue'), // 子路由的组件
                 name: 'InterfaceManger', // 子路由的名称
                 props: true, // 启用路由参数传递
+            },
+            {
+                path: '/admin/interfaceDetailPage', // 子路由的路径，会被追加到父路由路径后面，例如：/child1
+                component: () => import('@/page/InterfaceDetailPage.vue'), // 子路由的组件
+                name: 'interfaceDetailPage', // 子路由的名称
+                props: true, // 启用路由参数传递
             }
         ]
     },

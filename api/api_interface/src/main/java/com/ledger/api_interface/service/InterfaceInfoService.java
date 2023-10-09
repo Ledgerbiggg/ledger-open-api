@@ -1,16 +1,17 @@
 package com.ledger.api_interface.service;
 
-import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ledger.api_common.model.query.PageQuery;
 import com.ledger.api_common.response.Result;
 import com.ledger.api_interface.model.domain.InterfaceInfo;
 import com.ledger.api_interface.model.dto.InterfaceInfo.InterfaceInfoCallRequest;
+import com.ledger.api_interface.model.dto.InterfaceInfo.InterfaceInfoListSearchRequest;
+import com.ledger.api_interface.model.vo.InterfaceInfo.InterfaceInfoAdminQueryListRequest;
 import com.ledger.api_interface.model.vo.InterfaceInfo.InterfaceInfoQueryListRequest;
 import com.ledger.api_interface.model.vo.InterfaceInfo.InterfaceInfoWithParams;
 
-import java.util.HashMap;
+import java.util.List;
 
 /**
 * @author 22866
@@ -24,5 +25,8 @@ public interface InterfaceInfoService extends IService<InterfaceInfo> {
     Result<InterfaceInfoWithParams> getInterfaceById(String id);
 
     Result<Object> call(InterfaceInfoCallRequest interfaceInfoCallRequest);
+
+
+    Result<List<InterfaceInfoAdminQueryListRequest>> adminGetInterfaceList(InterfaceInfoListSearchRequest interfaceInfoCallRequest);
 
 }

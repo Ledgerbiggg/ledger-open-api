@@ -32,7 +32,6 @@
               v-model="searchParams[item.model]"
               :show-all-levels="false"/>
         </div>
-
       </div>
       <div class="searchBtn">
         <el-button>重置</el-button>
@@ -121,7 +120,7 @@ const search = () => {
   console.log("param==========", param)
 
   store.commit("setSearchParams2", param)
-  
+
   ElMessage.success("搜索成功")
 }
 const getOne=(arr)=>{

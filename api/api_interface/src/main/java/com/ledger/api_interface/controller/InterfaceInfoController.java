@@ -1,22 +1,22 @@
 package com.ledger.api_interface.controller;
 
 
-import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ledger.api_common.model.query.PageQuery;
 import com.ledger.api_common.response.Result;
 import com.ledger.api_interface.model.dto.InterfaceInfo.InterfaceInfoCallRequest;
+import com.ledger.api_interface.model.dto.InterfaceInfo.InterfaceInfoListSearchRequest;
+import com.ledger.api_interface.model.vo.InterfaceInfo.InterfaceInfoAdminQueryListRequest;
 import com.ledger.api_interface.model.vo.InterfaceInfo.InterfaceInfoQueryListRequest;
 import com.ledger.api_interface.model.vo.InterfaceInfo.InterfaceInfoWithParams;
 import com.ledger.api_interface.service.InterfaceInfoService;
-import com.ledger.api_user.service.UserInfoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
-import java.util.Objects;
+import java.util.List;
 
 @RestController
 @Api(tags = "接口信息管理") // 添加 API 标签
@@ -39,13 +39,18 @@ public class InterfaceInfoController {
         return interfaceInfoService.getInterfaceById(id);
     }
 
+
     @PostMapping("/call")
     @ApiOperation("调用接口方法") // 添加 API 操作说明
     public Result<Object> call(@RequestBody InterfaceInfoCallRequest interfaceInfoCallRequest) {
         return interfaceInfoService.call(interfaceInfoCallRequest);
     }
 
-
-
+    @GetMapping("/admin/getInterfaceList")
+    @PreAuthorize("hasAnyAuthority('admin')")
+    @ApiOperation("管理员获取所有的接口信息") // 添加 API 操作说明
+    public Result<List<InterfaceInfoAdminQueryListRequest>> adminGetInterfaceById(InterfaceInfoListSearchRequest interfaceInfoCallRequest) {
+        return interfaceInfoService.adminGetInterfaceList(interfaceInfoCallRequest);
+    }
 
 }

@@ -18,6 +18,8 @@ import com.ledger.api_interface.model.domain.InterfaceInfo;
 import com.ledger.api_interface.model.domain.RequestParameters;
 import com.ledger.api_interface.model.domain.ResponseParameters;
 import com.ledger.api_interface.model.dto.InterfaceInfo.InterfaceInfoCallRequest;
+import com.ledger.api_interface.model.dto.InterfaceInfo.InterfaceInfoListSearchRequest;
+import com.ledger.api_interface.model.vo.InterfaceInfo.InterfaceInfoAdminQueryListRequest;
 import com.ledger.api_interface.model.vo.InterfaceInfo.InterfaceInfoQueryListRequest;
 import com.ledger.api_interface.model.vo.InterfaceInfo.InterfaceInfoWithParams;
 import com.ledger.api_interface.service.CallHistoryService;
@@ -37,6 +39,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author 22866
@@ -106,7 +109,7 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
         String username = userDetails.getUsername();
         UserInfo userByUsername = userInfoService.getUserByUsername(username);
         BigDecimal divide = userByUsername.getAccount().subtract(new BigDecimal("1"));
-        if(divide.compareTo(new BigDecimal(0))<0){
+        if (divide.compareTo(new BigDecimal(0)) < 0) {
             throw new KnowException("余额不足");
         }
         userByUsername.setAccount(divide);
@@ -129,7 +132,7 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
         callHistory.setUser_id(id);
         callHistory.setCall_time(LocalDateTime.now());
         callHistory.setInsterface_id(interfaceInfoCallRequest.getInterfaceId());
-        if(jsonObject instanceof JSONArray){
+        if (jsonObject instanceof JSONArray) {
             JSONArray jsonArray = (JSONArray) jsonObject;
             callHistory.setResult(jsonArray.toJSONString());
         } else if (jsonObject instanceof JSONObject) {
@@ -141,6 +144,30 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
 
         return Result.success(jsonObject);
     }
+
+    @Override
+    public Result<List<InterfaceInfoAdminQueryListRequest>> adminGetInterfaceList(InterfaceInfoListSearchRequest interfaceInfoCallRequest) {
+        LambdaQueryWrapper<InterfaceInfo> wrapper = new LambdaQueryWrapper<>();
+        String id = interfaceInfoCallRequest.getId();
+        String name = interfaceInfoCallRequest.getName();
+        int status = interfaceInfoCallRequest.getStatus();
+        int consume = interfaceInfoCallRequest.getConsume();
+        String method = interfaceInfoCallRequest.getMethod();
+
+        wrapper.eq(StrUtil.isNotBlank(id), InterfaceInfo::getId, id);
+        wrapper.eq(StrUtil.isNotBlank(name), InterfaceInfo::getName, name);
+        wrapper.eq(status>-1, InterfaceInfo::getStatus, status);
+        wrapper.eq(consume>-1, InterfaceInfo::getConsume, consume);
+        wrapper.eq(StrUtil.isNotBlank(method), InterfaceInfo::getMethod, method);
+        List<InterfaceInfo> list = list(wrapper);
+
+        List<InterfaceInfoAdminQueryListRequest> collect =
+                list.stream().map(i ->
+                        BeanUtil.copyProperties(i, InterfaceInfoAdminQueryListRequest.class)).collect(Collectors.toList());
+        return Result.success(collect);
+    }
+
+
 }
 
 

@@ -126,10 +126,9 @@ watch(searchParams, () => {
 
 const handleEdit = (row) => {
   // 编辑按钮的点击事件处理逻辑
-  console.log('编辑', row)
+  store.commit("setOrderDetail", row)
   router.push({
     path: '/orderDetailPage',
-    query: row
   })
 }
 
