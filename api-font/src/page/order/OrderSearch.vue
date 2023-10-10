@@ -22,7 +22,7 @@
         </div>
       </div>
       <div class="searchBtn">
-        <el-button>重置</el-button>
+        <el-button @click="reset">重置</el-button>
         <el-button type="primary" @click="search">搜索</el-button>
       </div>
     </div>
@@ -33,6 +33,7 @@
 import {ref} from 'vue'
 import store from "@/store/store";
 import {ElMessage} from "element-plus";
+import {deepClone} from "@/js/ObjectClone";
 
 const searchList = ref([
   {
@@ -84,7 +85,6 @@ const searchParams = ref({
   orderState: "",
 })
 const search = () => {
-  console.log("searchParams.value.orderState", searchParams.value)
   let param = deepClone(searchParams.value);
   if (searchParams.value.orderState.length !== 0 && searchParams.value.orderState[0]) {
     switch (searchParams.value.orderState[0]) {
@@ -102,35 +102,19 @@ const search = () => {
       }
     }
   }
-  console.log("searchParams.value.orderState1111", param)
-
   store.commit("setSearchParams", param)
 
   ElMessage.success("搜索成功")
 }
-const deepClone = (obj) => {
-  if (typeof obj !== 'object' || obj === null) {
-    return obj;
-  }
 
-  if (Array.isArray(obj)) {
-    const clonedArray = [];
-    for (let i = 0; i < obj.length; i++) {
-      clonedArray[i] = deepClone(obj[i]);
-    }
-    return clonedArray;
+const reset = () => {
+  searchParams.value = {
+    subject: "",
+    traceNo: "",
+    totalAmount: "",
+    orderState: "",
   }
-
-  const clonedObject = {};
-  for (const key in obj) {
-    if (Object.prototype.hasOwnProperty.call(obj, key)) { // 修复这里
-      clonedObject[key] = deepClone(obj[key]);
-    }
-  }
-
-  return clonedObject;
 }
-
 
 </script>
 <style>

@@ -1,4 +1,4 @@
-package com.ledger.api_common.res;
+package com.ledger.api_common.enums;
 
 public enum ContentTypeEnum {
     TEXT_HTML("text/html"),

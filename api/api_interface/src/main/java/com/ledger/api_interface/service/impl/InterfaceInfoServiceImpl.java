@@ -2,14 +2,16 @@ package com.ledger.api_interface.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
+
+import java.util.Base64;
+
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ledger.api_common.Exception.KnowException;
 import com.ledger.api_common.model.query.PageQuery;
 import com.ledger.api_common.response.Result;
+import com.ledger.api_common.util.HttpUtil;
 import com.ledger.api_common.util.PageUtil;
 import com.ledger.api_common.util.ResUtils;
 import com.ledger.api_interface.mapper.InterfaceInfoMapper;
@@ -113,35 +115,42 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
             throw new KnowException("余额不足");
         }
         userByUsername.setAccount(divide);
+        //调用次数加一
         interfaceInfoMapper.addCount(interfaceInfoCallRequest.getInterfaceId());
         userInfoService.updateById(userByUsername);
-
-        Object jsonObject;
+        Object jsonObject = "";
         String method = interfaceInfoCallRequest.getMethod();
         String url = interfaceInfoCallRequest.getUrl();
         HashMap<String, Object> params = interfaceInfoCallRequest.getParams();
+        String respType = interfaceInfoCallRequest.getResp_type();
         if ("POST".equalsIgnoreCase(method)) {
-            jsonObject = ResUtils.postDataForCommon(url, params);
+            if ("JSON".equalsIgnoreCase(respType)) {
+                jsonObject = HttpUtil.postJson(url, params, null);
+            } else if ("IMAGE".equalsIgnoreCase(respType)) {
+                String image = (String) HttpUtil.post(url, params, null);
+                byte[] bytes = image.getBytes();
+                jsonObject = Base64.getEncoder().encodeToString(bytes);
+            }
         } else if ("GET".equalsIgnoreCase(method)) {
-            jsonObject = ResUtils.getDataForCommon(url, params);
+            if ("JSON".equalsIgnoreCase(respType)) {
+                jsonObject = HttpUtil.getJson(url, params, null);
+            } else if ("IMAGE".equalsIgnoreCase(respType)) {
+                String image = (String) HttpUtil.get(url, params, null);
+                byte[] bytes = image.getBytes();
+                jsonObject = Base64.getEncoder().encodeToString(bytes);
+            }
         } else {
             throw new KnowException("不正确的调用方法");
         }
         String id = userByUsername.getId();
-        CallHistory callHistory = new CallHistory();
-        callHistory.setUser_id(id);
-        callHistory.setCall_time(LocalDateTime.now());
-        callHistory.setInsterface_id(interfaceInfoCallRequest.getInterfaceId());
-        if (jsonObject instanceof JSONArray) {
-            JSONArray jsonArray = (JSONArray) jsonObject;
-            callHistory.setResult(jsonArray.toJSONString());
-        } else if (jsonObject instanceof JSONObject) {
-            JSONObject jsonObject1 = (JSONObject) jsonObject;
-            callHistory.setResult(jsonObject1.toJSONString());
+        if ("JSON".equalsIgnoreCase(respType)) {
+            CallHistory callHistory = new CallHistory();
+            callHistory.setUser_id(id);
+            callHistory.setCall_time(LocalDateTime.now());
+            callHistory.setInsterface_id(interfaceInfoCallRequest.getInterfaceId());
+            callHistory.setResult(jsonObject.toString());
+            callHistoryService.save(callHistory);
         }
-        callHistoryService.save(callHistory);
-
-
         return Result.success(jsonObject);
     }
 
@@ -156,8 +165,8 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
 
         wrapper.eq(StrUtil.isNotBlank(id), InterfaceInfo::getId, id);
         wrapper.eq(StrUtil.isNotBlank(name), InterfaceInfo::getName, name);
-        wrapper.eq(status>-1, InterfaceInfo::getStatus, status);
-        wrapper.eq(consume>-1, InterfaceInfo::getConsume, consume);
+        wrapper.eq(status > -1, InterfaceInfo::getStatus, status);
+        wrapper.eq(consume > -1, InterfaceInfo::getConsume, consume);
         wrapper.eq(StrUtil.isNotBlank(method), InterfaceInfo::getMethod, method);
         List<InterfaceInfo> list = list(wrapper);
 

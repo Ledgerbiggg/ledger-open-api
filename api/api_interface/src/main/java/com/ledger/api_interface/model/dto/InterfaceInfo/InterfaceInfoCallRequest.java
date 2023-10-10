@@ -10,6 +10,7 @@ public class InterfaceInfoCallRequest {
     String url;
     String method;
     String interfaceId;
+    String resp_type;
 
     HashMap<String, Object> params;
 

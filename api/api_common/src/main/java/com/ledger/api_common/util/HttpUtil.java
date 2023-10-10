@@ -1,7 +1,8 @@
-package com.ledger.api_common.res;
+package com.ledger.api_common.util;
 
 
 import com.alibaba.fastjson.JSON;
+import com.ledger.api_common.enums.ContentTypeEnum;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -30,7 +31,7 @@ public class HttpUtil {
      * @param reqHeaderMap 请求头
      * @return 请求示例
      */
-    public static Object get(String url, Map<String, Object> params, HashMap<String,String> reqHeaderMap) {
+    public static Object get(String url, Map<String, Object> params, HashMap<String, String> reqHeaderMap) {
         StringJoiner sj = new StringJoiner("&", "?", "");
         if (params != null) {
             params.forEach((k, v) -> {
@@ -63,7 +64,7 @@ public class HttpUtil {
      * @param reqHeaderMap 请求头
      * @return 请求示例
      */
-    public static Object post(String url, Map<String, Object> resBody, HashMap<String,String> reqHeaderMap) {
+    public static Object post(String url, Map<String, Object> resBody, HashMap<String, String> reqHeaderMap) {
         //请求头
         HttpHeaders headers = new HttpHeaders();
         if (reqHeaderMap != null) {
@@ -83,35 +84,77 @@ public class HttpUtil {
         return res.getBody();
     }
 
+    public static JSON getJson(String url, Map<String, Object> params, HashMap<String, String> reqHeaderMap) {
+        Object data = get(url, params, reqHeaderMap);
+        return JSON.parseObject((String) data, JSON.class);
+    }
 
+    public static JSON postJson(String url, Map<String, Object> resBody, HashMap<String, String> reqHeaderMap) {
+        Object data = post(url, resBody, reqHeaderMap);
+        return JSON.parseObject((String) data, JSON.class);
+    }
+
+
+    /**
+     * get直接返回响应(根据数据的类型)
+     *
+     * @param url                 url
+     * @param params              路径参数
+     * @param reqHeaderMap        请求头
+     * @param httpServletResponse 响应
+     * @param contentTypeEnum     响应类型
+     */
     public static void getAndSend(String url,
                                   Map<String, Object> params,
-                                  HashMap<String,String> reqHeaderMap,
+                                  HashMap<String, String> reqHeaderMap,
                                   HttpServletResponse httpServletResponse,
                                   ContentTypeEnum contentTypeEnum) {
         Object data = get(url, params, reqHeaderMap);
         httpServletResponse.setContentType(contentTypeEnum.getContentType());
-        write(httpServletResponse, data);
+        try {
+            write(httpServletResponse, data);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
+    /**
+     * post直接返回响应(根据数据的类型)
+     *
+     * @param url                 url
+     * @param resBody             请求体
+     * @param reqHeaderMap        请求头
+     * @param httpServletResponse 响应
+     * @param contentTypeEnum     响应类型
+     */
     public static void postAndSend(String url,
-                                   Map<String, Object> params,
-                                   HashMap<String,String> reqHeaderMap,
+                                   Map<String, Object> resBody,
+                                   HashMap<String, String> reqHeaderMap,
                                    HttpServletResponse httpServletResponse,
                                    ContentTypeEnum contentTypeEnum) {
-        Object data = post(url, params, reqHeaderMap);
+        Object data = post(url, resBody, reqHeaderMap);
         httpServletResponse.setContentType(contentTypeEnum.getContentType());
-        write(httpServletResponse, data);
+        try {
+            write(httpServletResponse, data);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    private static void write(HttpServletResponse httpServletResponse, Object data) {
+    /**
+     * 写入文件
+     *
+     * @param httpServletResponse 响应
+     * @param data                数据
+     */
+    private static void write(HttpServletResponse httpServletResponse, Object data) throws IOException {
         PrintWriter writer = null;
         try {
             writer = httpServletResponse.getWriter();
             writer.println(data);
             writer.flush();
         } catch (IOException e) {
-            writeWrong(httpServletResponse, writer, e);
+            writeWrong(httpServletResponse, httpServletResponse.getWriter(), e);
             throw new RuntimeException(e);
         } finally {
             if (writer != null) {
@@ -120,8 +163,15 @@ public class HttpUtil {
         }
     }
 
+    /**
+     * 写入报错
+     *
+     * @param httpServletResponse 响应
+     * @param writer              写入
+     * @param e                   错误
+     */
     private static void writeWrong(HttpServletResponse httpServletResponse, PrintWriter writer, Exception e) {
-        if(writer==null) {
+        if (writer == null) {
             return;
         }
         writer.println("出错" + e.getMessage());
