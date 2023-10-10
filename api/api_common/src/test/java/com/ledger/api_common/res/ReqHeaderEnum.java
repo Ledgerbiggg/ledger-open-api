@@ -13,7 +13,7 @@ public enum ReqHeaderEnum {
     LAST_MODIFIED("Last-Modified"),
     ETAG("ETag"),
     ACCESS_CONTROL_ALLOW_ORIGIN("Access-Control-Allow-Origin"),
-    AUTHORIZATION("Authorization"); // 添加"Authorization"
+    AUTHORIZATION("Authorization"); // 添加"Authorization "
 
     private final String headerName;
 
