@@ -68,7 +68,6 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
         auth.forEach(stringJoiner::add);
         response.setHeader("Role", stringJoiner.toString());
         response.setHeader("Authorization", tokenHead + " " + token);
-        System.out.println(5645251);
         return Result.success("登录成功");
 
     }
@@ -83,7 +82,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
         if(getUserByUsername(username)!=null){
             return Result.fail("用户已经存在", 403);
         }
-        //保存用户
+        //保存用户信息
         UserInfo userInfo = new UserInfo();
         String userId = UUID.randomUUID().toString();
         userInfo.setId(userId);

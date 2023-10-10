@@ -25,10 +25,10 @@ class InterfaceInfoServiceImplTest {
         HashMap<String, Object> map = new HashMap<>();
 
 
-        map.put("phone","18248625125");
-        Result<JSONObject> get =
-                interfaceInfoService.call("https://v.api.aa1.cn/api/phone/guishu-api.php", "GET", map);
-        log.info(get.getData().toString());
+//        map.put("phone","18248625125");
+//        Result<JSONObject> get =
+//                interfaceInfoService.call("https://v.api.aa1.cn/api/phone/guishu-api.php", "GET", map);
+//        log.info(get.getData().toString());
 
     }
 }
