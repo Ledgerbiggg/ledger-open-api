@@ -23,7 +23,12 @@
       </div>
       <div class="line">
         <div class="label">请求体格式</div>
-        <div class="context">{{interfaceDetail.resp_type}}</div>
+        <div class="context">
+          <el-tag class="ml-2"
+                  :type="interfaceDetail.resp_type==='JSON' ? '' : 'success'">
+            {{ interfaceDetail.resp_type }}
+          </el-tag>
+          </div>
       </div>
       <div class="line">
         <div class="label">接口id</div>
