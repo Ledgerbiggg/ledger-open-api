@@ -53,6 +53,7 @@
               :res="interfaceDetail.requestParametersList"
               :resp="interfaceDetail.responseParametersList"
               :example="interfaceDetail.example"
+              :resp_type="interfaceDetail.resp_type"
           />
         </el-tab-pane>
         <el-tab-pane label="在线调试工具" name="debug">

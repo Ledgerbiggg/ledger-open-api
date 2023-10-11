@@ -59,6 +59,8 @@ public class UserInfo implements Serializable {
 
     private BigDecimal account;
 
+    private String avatar;
+
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 }

@@ -19,6 +19,8 @@ export default createStore({
             docLink: "https://www.baidu.com",
             //用户协议
             userAgreement: "https://www.baidu.com",
+            //上传头像地址
+            uploadAvatar: "http://localhost/api/user/uploadAvatar",
         },
         //接口历史结果弹窗
         showResultDialog: false,
@@ -52,6 +54,7 @@ export default createStore({
         interfaceDetail:{
 
         },
+
 
 
     },

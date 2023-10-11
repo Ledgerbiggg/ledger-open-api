@@ -8,6 +8,7 @@ import com.ledger.api_user.service.UserInfoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
@@ -36,5 +37,15 @@ public class UserInfoController {
     public Result<UserInfo> getUser(){
         return Result.success(new UserInfo());
     }
+
+
+    @GetMapping("/uploadAvatar")
+    @ApiOperation("上传头像")
+    public Result<UserInfo> uploadAvatar(@RequestBody MultipartFile file){
+        return userInfoService.uploadAvatar(file);
+    }
+
+
+
 
 }

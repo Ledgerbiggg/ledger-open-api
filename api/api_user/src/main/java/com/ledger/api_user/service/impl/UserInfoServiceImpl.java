@@ -17,9 +17,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.StringJoiner;
@@ -96,6 +100,20 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
         save(userInfo);
         userPermissionsService.save(userPermissions);
         return Result.success("注册成功");
+    }
+
+    @Override
+    public Result<UserInfo> uploadAvatar(MultipartFile file) {
+        //TODO
+        String contentType = file.getContentType();
+        try {
+            FileOutputStream fileOutputStream = new FileOutputStream("./test." + contentType);
+            fileOutputStream.write(file.getBytes());
+            fileOutputStream.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
     }
 
     @Override

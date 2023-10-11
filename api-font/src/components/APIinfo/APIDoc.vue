@@ -47,7 +47,12 @@
     </table>
   </div>
   <div class="resParamDesc">返回示例：</div>
-  <v-md-preview :text="'```json\n'+props.example" @copy-code-success="handleCopyCodeSuccess"></v-md-preview>
+  <div v-if="props.resp_type==='JSON'">
+    <v-md-preview :text="'```json\n'+props.example" @copy-code-success="handleCopyCodeSuccess"></v-md-preview>
+  </div>
+  <div class="imageBox">
+    <img :src="'data:image/png;base64,'+props.example" alt="没有"/>
+  </div>
 </template>
 <script setup>
 
@@ -61,10 +66,11 @@ const props = defineProps({
   res: Array,
   resp: Array,
   example: String,
+  resp_type: String
 });
 
 onMounted(() => {
-  console.log("props", props.res)
+  console.log("props", props.example)
 })
 
 const handleCopyCodeSuccess = () => {
@@ -122,6 +128,9 @@ const handleCopyCodeSuccess = () => {
     transition: all .8s;
     background: rgba(180, 180, 180, 0.23);
   }
+}
+.imageBox{
+  margin-bottom: 5vh;
 }
 
 </style>

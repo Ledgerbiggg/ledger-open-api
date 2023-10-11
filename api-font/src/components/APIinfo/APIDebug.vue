@@ -59,7 +59,7 @@
                 @copy-code-success="handleCopyCodeSuccess">
         </v-md-preview>
       </div>
-      <div v-if="props.resp_type==='IMAGE'">
+      <div v-if="props.resp_type==='IMAGE'&& Object.keys(json).length" class="imageBox">
         <img :src="json"/>
       </div>
     </div>
@@ -85,15 +85,17 @@ onMounted(() => {
   setTimeout(() => {
     params.value = props.res
     console.log("params", params.value)
-  }, 1000)
+  }, 700)
 })
 const json = ref({})
 
 const call = () => {
   let p = {}
-  params.value.forEach((item) => {
-    p[item.name] = item.default_value
-  });
+  if(params.value){
+    params.value.forEach((item) => {
+      p[item.name] = item.default_value
+    });
+  }
   http.post("/interfaceInfo/call", {
     method: props.method,
     params: p,
@@ -107,7 +109,6 @@ const call = () => {
       if(props.resp_type==="JSON"){
         json.value = res.data.data
       }else if(props.resp_type==="IMAGE"){
-        console.log("image:base64",res.data.data)
         json.value="data:image/png;base64,"+res.data.data
       }
     } else {
@@ -220,5 +221,12 @@ const handleCopyCodeSuccess = () => {
 }
 
 .code {
+  min-height: 15vh;
+}
+.imageBox{
+  width: 100%;
+  img{
+    width: 100%;
+  }
 }
 </style>
