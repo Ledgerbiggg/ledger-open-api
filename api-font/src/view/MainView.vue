@@ -23,7 +23,7 @@
         </el-icon>
         <div class="doc"><a :href="docLink" class="doc-link" target="_blank">开发者文档</a></div>
       </div>
-      <div class="avatar">
+      <div class="avatar" @click="goRouter('/account/center')">
         <el-avatar :size="50"
                    src="https://image-bed-for-ledgerhhh.oss-cn-beijing.aliyuncs.com/image/f898326080e5beae1f061950b308fc9.jpg"/>
       </div>
@@ -82,6 +82,8 @@ onMounted(() => {
   store.commit('setRole', item);
   role.value = item
 })
+
+
 
 const goRouter = (path) => {
   router.push(path)

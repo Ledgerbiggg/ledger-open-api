@@ -61,6 +61,7 @@
               :method="interfaceDetail.method"
               :res="interfaceDetail.requestParametersList"
               :interfaceId="interfaceDetail.id"
+              :resp_type="interfaceDetail.resp_type"
           />
         </el-tab-pane>
         <el-tab-pane label="调用记录" name="errCode">

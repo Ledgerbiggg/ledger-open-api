@@ -12,8 +12,11 @@
           <td @click="showDetail(item)" class="showDetail" style="text-align: center">查看</td>
         </tr>
         <tr v-if="!(callHistoryList===undefined?0:callHistoryList.length)">
-          <td>暂无</td>
-          <td>暂无</td>
+          <td style="text-align: center">暂无</td>
+          <td style="text-align: center">暂无</td>
+        </tr>
+        <tr>
+          <td style="text-align: center" colspan="2">tip:图片数据不予保存</td>
         </tr>
         </tbody>
       </table>

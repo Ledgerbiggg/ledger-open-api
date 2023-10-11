@@ -53,10 +53,15 @@
       返回结果：
     </div>
     <div class="code">
-      <v-md-preview
-          :text="'```json\n'+ JSON.stringify(json, null, 2)"
-          @copy-code-success="handleCopyCodeSuccess">
-      </v-md-preview>
+      <div v-if="props.resp_type==='JSON'">
+        <v-md-preview
+                :text="'```json\n'+ JSON.stringify(json, null, 2)"
+                @copy-code-success="handleCopyCodeSuccess">
+        </v-md-preview>
+      </div>
+      <div v-if="props.resp_type==='IMAGE'">
+        <img :src="json"/>
+      </div>
     </div>
   </div>
 </template>
@@ -71,6 +76,7 @@ const props = defineProps({
   method: String,
   res: Array,
   interfaceId: String,
+  resp_type:String
 });
 
 const params = ref([{default_value: ""}])
@@ -92,12 +98,18 @@ const call = () => {
     method: props.method,
     params: p,
     url: props.url,
-    interfaceId: props.interfaceId
+    interfaceId: props.interfaceId,
+    resp_type:props.resp_type
   }).then((res) => {
     if (res.data.code === 200) {
       ElMessage.success("调用成功")
       store.commit("call");
-      json.value = res.data.data
+      if(props.resp_type==="JSON"){
+        json.value = res.data.data
+      }else if(props.resp_type==="IMAGE"){
+        console.log("image:base64",res.data.data)
+        json.value="data:image/png;base64,"+res.data.data
+      }
     } else {
       ElMessage.warning(res.data.data)
     }

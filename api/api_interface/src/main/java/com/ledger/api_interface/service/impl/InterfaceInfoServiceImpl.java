@@ -1,8 +1,11 @@
 package com.ledger.api_interface.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.StrUtil;
 
+import java.io.*;
 import java.util.Base64;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -30,6 +33,7 @@ import com.ledger.api_interface.service.RequestParametersService;
 import com.ledger.api_interface.service.ResponseParametersService;
 import com.ledger.api_user.model.domain.UserInfo;
 import com.ledger.api_user.service.UserInfoService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -66,6 +70,7 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
 
     @Resource
     private CallHistoryService callHistoryService;
+
 
 
     @Override
@@ -127,16 +132,14 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
             if ("JSON".equalsIgnoreCase(respType)) {
                 jsonObject = HttpUtil.postJson(url, params, null);
             } else if ("IMAGE".equalsIgnoreCase(respType)) {
-                String image = (String) HttpUtil.post(url, params, null);
-                byte[] bytes = image.getBytes();
+                byte[] bytes = HttpUtil.getByteArr(url, params, null);
                 jsonObject = Base64.getEncoder().encodeToString(bytes);
             }
         } else if ("GET".equalsIgnoreCase(method)) {
             if ("JSON".equalsIgnoreCase(respType)) {
                 jsonObject = HttpUtil.getJson(url, params, null);
             } else if ("IMAGE".equalsIgnoreCase(respType)) {
-                String image = (String) HttpUtil.get(url, params, null);
-                byte[] bytes = image.getBytes();
+                byte[] bytes = HttpUtil.getByteArr(url, params, null);
                 jsonObject = Base64.getEncoder().encodeToString(bytes);
             }
         } else {
