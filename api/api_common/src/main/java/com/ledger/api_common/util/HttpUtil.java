@@ -31,29 +31,8 @@ public class HttpUtil {
      * @param reqHeaderMap 请求头
      * @return 请求示例
      */
-    public static Object get(String url, Map<String, Object> params, HashMap<String, String> reqHeaderMap) {
-        StringJoiner sj = new StringJoiner("&", "?", "");
-        if (params != null) {
-            params.forEach((k, v) -> {
-                if (!"url".equals(k)) {
-                    sj.add(k + "=" + v);
-                }
-            });
-        }
-        //请求头
-        HttpHeaders headers = new HttpHeaders();
-        if (reqHeaderMap != null) {
-            reqHeaderMap.forEach(headers::set);
-        }
-        HttpEntity<String> requestEntity = new HttpEntity<>(headers);
-
-        ResponseEntity<String> res = restTemplate.exchange(
-                url + sj,
-                HttpMethod.GET,
-                requestEntity,
-                String.class
-        );
-        return res.getBody();
+    public static String get(String url, Map<String, Object> params, HashMap<String, String> reqHeaderMap) {
+        return getUtil(url, params, reqHeaderMap, String.class);
     }
 
     /**
@@ -64,31 +43,55 @@ public class HttpUtil {
      * @param reqHeaderMap 请求头
      * @return 请求示例
      */
-    public static Object post(String url, Map<String, Object> resBody, HashMap<String, String> reqHeaderMap) {
-        //请求头
-        HttpHeaders headers = new HttpHeaders();
-        if (reqHeaderMap != null) {
-            reqHeaderMap.forEach(headers::set);
-        }
-        //请求体
-        String requestBody = JSON.toJSONString(resBody);
-
-        HttpEntity<String> requestEntity = new HttpEntity<>(requestBody, headers);
-
-        ResponseEntity<String> res = restTemplate.exchange(
-                url,
-                HttpMethod.POST,
-                requestEntity,
-                String.class
-        );
-        return res.getBody();
+    public static String post(String url, Map<String, Object> resBody, HashMap<String, String> reqHeaderMap) {
+        return postUtil(url, resBody, reqHeaderMap, String.class);
     }
 
+    /**
+     * get请求(字节数组)
+     *
+     * @param url          地址
+     * @param params       参数
+     * @param reqHeaderMap 请求头
+     * @return 请求示例
+     */
+    public static byte[] getByteArr(String url, Map<String, Object> params, HashMap<String, String> reqHeaderMap) {
+      return getUtil(url, params, reqHeaderMap, byte[].class);
+    }
+
+    /**
+     * post请求(字节数组)
+     *
+     * @param url          地址
+     * @param resBody      参数
+     * @param reqHeaderMap 请求头
+     * @return 请求示例
+     */
+    public static byte[] postByteArr(String url, Map<String, Object> resBody, HashMap<String, String> reqHeaderMap) {
+       return postUtil(url, resBody, reqHeaderMap, byte[].class);
+    }
+
+    /**
+     * get将文件转换为json字符串
+     *
+     * @param url          url
+     * @param params       路径参数
+     * @param reqHeaderMap 请求头
+     * @return 返回json
+     */
     public static JSON getJson(String url, Map<String, Object> params, HashMap<String, String> reqHeaderMap) {
         Object data = get(url, params, reqHeaderMap);
         return JSON.parseObject((String) data, JSON.class);
     }
 
+    /**
+     * post将文件转换为json字符串
+     *
+     * @param url          url
+     * @param resBody      请求体
+     * @param reqHeaderMap 请求头
+     * @return 返回json
+     */
     public static JSON postJson(String url, Map<String, Object> resBody, HashMap<String, String> reqHeaderMap) {
         Object data = post(url, resBody, reqHeaderMap);
         return JSON.parseObject((String) data, JSON.class);
@@ -140,6 +143,72 @@ public class HttpUtil {
             throw new RuntimeException(e);
         }
     }
+
+
+    /**
+     * 通用方法
+     * @param url
+     * @param params
+     * @param reqHeaderMap
+     * @param responseType
+     * @param <T>
+     * @return
+     */
+    private static <T> T getUtil(String url, Map<String, Object> params, HashMap<String, String> reqHeaderMap, Class<T> responseType) {
+        StringJoiner sj = new StringJoiner("&", "?", "");
+        if (params != null) {
+            params.forEach((k, v) -> {
+                if (!"url".equals(k)) {
+                    sj.add(k + "=" + v);
+                }
+            });
+        }
+        //请求头
+        HttpHeaders headers = new HttpHeaders();
+        if (reqHeaderMap != null) {
+            reqHeaderMap.forEach(headers::set);
+        }
+        HttpEntity<String> requestEntity = new HttpEntity<>(headers);
+
+        ResponseEntity<T> res = restTemplate.exchange(
+                url + sj,
+                HttpMethod.GET,
+                requestEntity,
+                responseType
+        );
+        return res.getBody();
+    }
+
+    /**
+     * 通用方法
+     *
+     * @param url
+     * @param resBody
+     * @param reqHeaderMap
+     * @param responseType
+     * @param <T>
+     * @return
+     */
+    private static <T> T postUtil(String url, Map<String, Object> resBody, HashMap<String, String> reqHeaderMap, Class<T> responseType) {
+        //请求头
+        HttpHeaders headers = new HttpHeaders();
+        if (reqHeaderMap != null) {
+            reqHeaderMap.forEach(headers::set);
+        }
+        //请求体
+        String requestBody = JSON.toJSONString(resBody);
+
+        HttpEntity<String> requestEntity = new HttpEntity<>(requestBody, headers);
+
+        ResponseEntity<T> res = restTemplate.exchange(
+                url,
+                HttpMethod.POST,
+                requestEntity,
+                responseType
+        );
+        return res.getBody();
+    }
+
 
     /**
      * 写入文件

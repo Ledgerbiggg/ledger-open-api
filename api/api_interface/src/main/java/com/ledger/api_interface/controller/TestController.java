@@ -19,9 +19,7 @@ public class TestController {
     @GetMapping("/test")
     @ApiOperation("测试") // 添加 API 操作说明
     public void test(HttpServletResponse httpServletResponse) {
-        HashMap<String, Object> stringStringHashMap = new HashMap<>();
 
-        stringStringHashMap.put("phone",18248625125L);
-        HttpUtil.getAndSend("https://v.api.aa1.cn/api/phone/guishu-api.php", stringStringHashMap, null, httpServletResponse, ContentTypeEnum.APPLICATION_JSON);
+        HttpUtil.getAndSend("https://www.dmoe.cc/random.php", null, null, httpServletResponse, ContentTypeEnum.IMAGE_PNG);
     }
 }

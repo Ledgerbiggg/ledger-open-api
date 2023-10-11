@@ -54,8 +54,15 @@ public class InterfaceInfoController {
     @GetMapping("/admin/getInterfaceList")
     @PreAuthorize("hasAnyAuthority('admin')")
     @ApiOperation("管理员获取所有的接口信息") // 添加 API 操作说明
-    public Result<List<InterfaceInfoAdminQueryListRequest>> adminGetInterfaceById(InterfaceInfoListSearchRequest interfaceInfoCallRequest) {
+    public Result<List<InterfaceInfoAdminQueryListRequest>> adminGetInterfaceList(InterfaceInfoListSearchRequest interfaceInfoCallRequest) {
         return interfaceInfoService.adminGetInterfaceList(interfaceInfoCallRequest);
     }
+    @PostMapping("/admin/saveInterfaceList")
+    @PreAuthorize("hasAnyAuthority('admin')")
+    @ApiOperation("管理员保存接口信息") // 添加 API 操作说明
+    public Result<List<InterfaceInfoAdminQueryListRequest>> adminSaveInterfaceList(InterfaceInfoListSearchRequest interfaceInfoCallRequest) {
+        return interfaceInfoService.adminGetInterfaceList(interfaceInfoCallRequest);
+    }
+
 
 }
