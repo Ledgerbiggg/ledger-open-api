@@ -5,6 +5,7 @@ import com.ledger.api_user.model.domain.UserInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ledger.api_user.model.dto.UserInfoLogin;
 import com.ledger.api_user.model.dto.UserInfoRegister;
+import com.ledger.api_user.model.vo.UploadVo;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
@@ -21,5 +22,5 @@ public interface UserInfoService extends IService<UserInfo> {
 
     Result<String> register(UserInfoRegister user, HttpServletResponse response);
 
-    Result<UserInfo> uploadAvatar(MultipartFile file);
+    Result<UploadVo> uploadAvatar(MultipartFile file);
 }

@@ -3,17 +3,21 @@ package com.ledger.api_user.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ledger.api_common.response.Result;
+import com.ledger.api_common.util.FileUtil;
 import com.ledger.api_user.model.domain.Permissions;
 import com.ledger.api_user.model.domain.SecurityUser;
 import com.ledger.api_user.model.domain.UserInfo;
 import com.ledger.api_user.model.domain.UserPermissions;
 import com.ledger.api_user.model.dto.UserInfoLogin;
 import com.ledger.api_user.model.dto.UserInfoRegister;
+import com.ledger.api_user.model.vo.UploadVo;
 import com.ledger.api_user.service.UserInfoService;
 import com.ledger.api_user.mapper.UserInfoMapper;
 import com.ledger.api_user.service.UserPermissionsService;
 import com.ledger.api_user.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,14 +35,14 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
-* @author 22866
-* @description 针对表【user_info(存储用户信息)】的数据库操作Service实现
-* @createDate 2023-09-30 17:32:12
-*/
+ * @author 22866
+ * @description 针对表【user_info(存储用户信息)】的数据库操作Service实现
+ * @createDate 2023-09-30 17:32:12
+ */
 @Service
 @Transactional
 public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
-    implements UserInfoService{
+        implements UserInfoService {
 
     @Value("${jwt.secret}")
     private String secret;
@@ -52,7 +56,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
     private static final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     static {
-        bCryptPasswordEncoder=new BCryptPasswordEncoder();
+        bCryptPasswordEncoder = new BCryptPasswordEncoder();
     }
 
     @Override
@@ -60,14 +64,14 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
         String username = user.getUsername();
         UserInfo userByUsername = getUserByUsername(username);
         if (userByUsername == null) {
-            return Result.fail("用户名不存在",403);
+            return Result.fail("用户名不存在", 403);
         }
         if (!bCryptPasswordEncoder.matches(user.getPassword(), userByUsername.getPassword())) {
             return Result.fail("密码错误", 403);
         }
-        List<String> auth  = userPermissionsService.getAuthByUserId(userByUsername.getId());
-        SecurityUser securityUser = new SecurityUser(userByUsername,auth);
-        String token = JwtUtil.createJwt(securityUser, auth,secret);
+        List<String> auth = userPermissionsService.getAuthByUserId(userByUsername.getId());
+        SecurityUser securityUser = new SecurityUser(userByUsername, auth);
+        String token = JwtUtil.createJwt(securityUser, auth, secret);
         StringJoiner stringJoiner = new StringJoiner(",");
         auth.forEach(stringJoiner::add);
         response.setHeader("Role", stringJoiner.toString());
@@ -75,15 +79,16 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
         return Result.success("登录成功");
 
     }
+
     @Override
     public Result<String> register(UserInfoRegister user, HttpServletResponse response) {
         String username = user.getUsername();
         String password = user.getPassword();
         String password2 = user.getPassword2();
-        if(!Objects.equals(password,password2)){
+        if (!Objects.equals(password, password2)) {
             return Result.fail("两次密码输入不一致", 403);
         }
-        if(getUserByUsername(username)!=null){
+        if (getUserByUsername(username) != null) {
             return Result.fail("用户已经存在", 403);
         }
         //保存用户信息
@@ -103,17 +108,19 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
     }
 
     @Override
-    public Result<UserInfo> uploadAvatar(MultipartFile file) {
+    public Result<UploadVo> uploadAvatar(MultipartFile file) {
         //TODO
-        String contentType = file.getContentType();
-        try {
-            FileOutputStream fileOutputStream = new FileOutputStream("./test." + contentType);
-            fileOutputStream.write(file.getBytes());
-            fileOutputStream.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        return null;
+        UserDetails authentication = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        String id = getUserByUsername(authentication.getUsername()).getId();
+
+        String path = FileUtil.copeFile(file, "./" + id, "localhost/");
+
+        UploadVo uploadVo = new UploadVo();
+
+        uploadVo.setPath(path);
+
+        return Result.success(uploadVo);
     }
 
     @Override

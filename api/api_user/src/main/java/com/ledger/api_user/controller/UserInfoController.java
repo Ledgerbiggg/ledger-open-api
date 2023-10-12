@@ -4,6 +4,7 @@ import com.ledger.api_common.response.Result;
 import com.ledger.api_user.model.domain.UserInfo;
 import com.ledger.api_user.model.dto.UserInfoLogin;
 import com.ledger.api_user.model.dto.UserInfoRegister;
+import com.ledger.api_user.model.vo.UploadVo;
 import com.ledger.api_user.service.UserInfoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -39,9 +40,9 @@ public class UserInfoController {
     }
 
 
-    @GetMapping("/uploadAvatar")
+    @PostMapping("/uploadAvatar")
     @ApiOperation("上传头像")
-    public Result<UserInfo> uploadAvatar(@RequestBody MultipartFile file){
+    public Result<UploadVo> uploadAvatar(@RequestBody MultipartFile file){
         return userInfoService.uploadAvatar(file);
     }
 
