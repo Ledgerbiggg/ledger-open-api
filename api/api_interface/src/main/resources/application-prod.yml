@@ -1,0 +1,3 @@
+sys:
+  # 文件路径 示例（ Windows配置D:/attach/data/uploadPath，Linux配置 /home/data/uploadPath）
+  profile: /home/data/uploadPath

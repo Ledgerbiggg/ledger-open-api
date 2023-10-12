@@ -61,6 +61,10 @@ public class UserInfo implements Serializable {
 
     private String avatar;
 
+    private String mail;
+
+    private String invitation_code;
+
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 }

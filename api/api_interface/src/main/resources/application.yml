@@ -13,6 +13,8 @@ spring:
         # nacos注册中心地址
         server-addr: 106.54.9.19:8848
         namespace: 81ae9a71-0a21-4992-9be9-7b145c5fa604
+  profiles:
+    active: dev
 
 #    hikari:
 #      maximum-pool-size: 20  # 连接池最大连接数

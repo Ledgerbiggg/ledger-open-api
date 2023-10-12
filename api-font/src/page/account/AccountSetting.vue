@@ -15,12 +15,12 @@
         </span>
                 <span class="goPayment">
         <el-button type="primary">
-          <div class="text">
+          <div class="text" @click="save">
             保存
           </div>
         </el-button>
         <el-button>
-          <div class="text">
+          <div class="text" @click="cancel">
             取消
           </div>
         </el-button>
@@ -35,10 +35,10 @@
                         :before-upload="beforeAvatarUpload"
                         :headers="{ Authorization: token }"
                 >
-                    <img v-if="imageUrl" :src="imageUrl" class="avatar"/>
+                    <img v-if="base64" :src="base64" class="avatar" ref="avatar"/>
                     <el-icon v-else class="avatar-uploader-icon">
                         <Plus/>
-                    </el-icon>x
+                    </el-icon>
                 </el-upload>
             </div>
             <div class="money">昵称:<span class="account">{{ account.nickName }}</span></div>
@@ -82,18 +82,26 @@
 </template>
 
 <script setup>
-  import {ref} from 'vue'
   import {ElMessage} from 'element-plus'
+  import http from "@/js/http";
+  import {onMounted, ref} from 'vue';
   // import {Plus} from '@element-plus/icons-vue'
   // import store from "@/store/store";
 
+  const token = ref("")
   const imageUrl = ref('')
-  const token=ref("")
+  const base64 = ref("")
 
+  // 上传获取图像
   const handleAvatarSuccess = (response, uploadFile) => {
+    console.log("response", response.data.nameWithFileExtension)
+    http.get("/user/getAvatar", {fileName: response.data.nameWithFileExtension}).then(res => {
+      base64.value = `data:image/jpg;base64,${res.data.data}`
+    })
     imageUrl.value = URL.createObjectURL(uploadFile.raw)
   }
 
+  // 获取token上传
   const beforeAvatarUpload = (rawFile) => {
     console.log("rawFile", rawFile.type)
     if (rawFile.type !== 'image/jpeg' && rawFile.type !== 'image/png' && rawFile.type !== 'image/gif') {
@@ -103,9 +111,26 @@
       ElMessage.error('上传头像图片大小不能超过 2MB!')
       return false
     }
-    token.value=window.localStorage.getItem('token');
+    token.value = window.localStorage.getItem('token');
     return true
   }
+
+  const save=()=>{
+
+  }
+  const cancel=()=>{
+
+  }
+  // const getUser=()=>{
+  //   http.get("/user/getUser").then(res => {
+  //
+  //   })
+  // }
+
+  onMounted(()=>{
+
+  })
+
 
   const account = ref({
     nickName: "",
@@ -120,11 +145,14 @@
 <style>
     .avatar-uploader .el-upload {
         border: 1px dashed var(--el-border-color);
-        border-radius: 6px;
+        /*border-radius: 6px;*/
         cursor: pointer;
         position: relative;
         overflow: hidden;
         transition: var(--el-transition-duration-fast);
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
     }
 
     .avatar-uploader .el-upload:hover {

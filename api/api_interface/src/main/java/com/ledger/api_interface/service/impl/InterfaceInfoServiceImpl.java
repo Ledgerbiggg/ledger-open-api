@@ -1,7 +1,6 @@
 package com.ledger.api_interface.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.StrUtil;
 
@@ -14,6 +13,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ledger.api_common.Exception.KnowException;
 import com.ledger.api_common.model.query.PageQuery;
 import com.ledger.api_common.response.Result;
+import com.ledger.api_common.util.FileUtil;
 import com.ledger.api_common.util.HttpUtil;
 import com.ledger.api_common.util.PageUtil;
 import com.ledger.api_common.util.ResUtils;
@@ -70,7 +70,6 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
 
     @Resource
     private CallHistoryService callHistoryService;
-
 
 
     @Override
@@ -140,7 +139,7 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
                 jsonObject = HttpUtil.getJson(url, params, null);
             } else if ("IMAGE".equalsIgnoreCase(respType)) {
                 byte[] bytes = HttpUtil.getByteArr(url, params, null);
-                jsonObject = Base64.getEncoder().encodeToString(bytes);
+                jsonObject = FileUtil.byteToBase64(bytes);
             }
         } else {
             throw new KnowException("不正确的调用方法");

@@ -5,6 +5,7 @@ import com.ledger.api_user.model.domain.UserInfo;
 import com.ledger.api_user.model.dto.UserInfoLogin;
 import com.ledger.api_user.model.dto.UserInfoRegister;
 import com.ledger.api_user.model.vo.UploadVo;
+import com.ledger.api_user.model.vo.UserInfoVo;
 import com.ledger.api_user.service.UserInfoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
 
 @RestController
@@ -24,26 +26,33 @@ public class UserInfoController {
 
     @PostMapping("/login")
     @ApiOperation("登录用户")
-    public Result<String> login(@RequestBody UserInfoLogin user, HttpServletResponse response){
+    public Result<String> login(@RequestBody UserInfoLogin user, HttpServletResponse response) {
         return userInfoService.login(user, response);
     }
+
     @PostMapping("/register")
     @ApiOperation("注册用户")
-    public Result<String> register(@RequestBody UserInfoRegister user, HttpServletResponse response){
+    public Result<String> register(@RequestBody UserInfoRegister user, HttpServletResponse response) {
         return userInfoService.register(user, response);
     }
 
     @GetMapping("/getUser")
     @ApiOperation("查询用户")
-    public Result<UserInfo> getUser(){
-        return Result.success(new UserInfo());
+    public Result<UserInfoVo> getUser() {
+        return userInfoService.getUser();
     }
 
 
     @PostMapping("/uploadAvatar")
     @ApiOperation("上传头像")
-    public Result<UploadVo> uploadAvatar(@RequestBody MultipartFile file){
+    public Result<UploadVo> uploadAvatar(@RequestBody MultipartFile file) {
         return userInfoService.uploadAvatar(file);
+    }
+
+    @GetMapping("/getAvatar")
+    @ApiOperation("获取头像")
+    public Result<String> getAvatar(String fileName) {
+        return userInfoService.getAvatar(fileName);
     }
 
 

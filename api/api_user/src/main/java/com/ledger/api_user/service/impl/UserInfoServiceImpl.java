@@ -1,16 +1,18 @@
 package com.ledger.api_user.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.io.IoUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ledger.api_common.response.Result;
 import com.ledger.api_common.util.FileUtil;
-import com.ledger.api_user.model.domain.Permissions;
 import com.ledger.api_user.model.domain.SecurityUser;
 import com.ledger.api_user.model.domain.UserInfo;
 import com.ledger.api_user.model.domain.UserPermissions;
 import com.ledger.api_user.model.dto.UserInfoLogin;
 import com.ledger.api_user.model.dto.UserInfoRegister;
 import com.ledger.api_user.model.vo.UploadVo;
+import com.ledger.api_user.model.vo.UserInfoVo;
 import com.ledger.api_user.service.UserInfoService;
 import com.ledger.api_user.mapper.UserInfoMapper;
 import com.ledger.api_user.service.UserPermissionsService;
@@ -24,15 +26,14 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.StringJoiner;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 /**
  * @author 22866
@@ -51,6 +52,9 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
 
     @Resource
     private UserPermissionsService userPermissionsService;
+
+    @Value("${sys.profile}")
+    private String profile;
 
 
     private static final BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -109,18 +113,53 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
 
     @Override
     public Result<UploadVo> uploadAvatar(MultipartFile file) {
-        //TODO
         UserDetails authentication = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         String id = getUserByUsername(authentication.getUsername()).getId();
 
-        String path = FileUtil.copeFile(file, "./" + id, "localhost/");
+        String nameWithFileExtension = FileUtil.uploadFile(file,  id, profile);
 
         UploadVo uploadVo = new UploadVo();
 
-        uploadVo.setPath(path);
-
+        String name = nameWithFileExtension.substring(0,nameWithFileExtension.lastIndexOf("."));
+        String fileExtension = nameWithFileExtension.substring(nameWithFileExtension.lastIndexOf(".") + 1);
+        uploadVo.setName(name);
+        uploadVo.setFileExtension(fileExtension);
+        uploadVo.setNameWithFileExtension(nameWithFileExtension);
         return Result.success(uploadVo);
+
+    }
+
+    @Override
+    public Result<String> getAvatar(String fileName) {
+        byte[] bytes = FileUtil.downloadFile(fileName, profile);
+
+        String base = FileUtil.byteToBase64(bytes);
+
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        UserInfo userInfo = getUserByUsername(userDetails.getUsername());
+
+        userInfo.setAvatar(base);
+
+        saveOrUpdate(userInfo);
+
+        return Result.success(base);
+
+    }
+
+    @Override
+    public Result<UserInfoVo> getUser() {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        UserInfo userInfo = getUserByUsername(userDetails.getUsername());
+
+        UserInfoVo userInfoVo = BeanUtil.copyProperties(userInfo, UserInfoVo.class);
+
+//        FileUtil.
+
+
+        return Result.success(userInfoVo);
     }
 
     @Override
