@@ -7,6 +7,7 @@ import com.ledger.api_common.response.Result;
 import com.ledger.api_interface.model.domain.InterfaceInfo;
 import com.ledger.api_interface.model.dto.InterfaceInfo.InterfaceInfoCallRequest;
 import com.ledger.api_interface.model.dto.InterfaceInfo.InterfaceInfoListSearchRequest;
+import com.ledger.api_interface.model.vo.InterfaceInfo.InterfaceInfoAdminQueryDetailRequest;
 import com.ledger.api_interface.model.vo.InterfaceInfo.InterfaceInfoAdminQueryListRequest;
 import com.ledger.api_interface.model.vo.InterfaceInfo.InterfaceInfoQueryListRequest;
 import com.ledger.api_interface.model.vo.InterfaceInfo.InterfaceInfoWithParams;
@@ -29,4 +30,5 @@ public interface InterfaceInfoService extends IService<InterfaceInfo> {
 
     Result<List<InterfaceInfoAdminQueryListRequest>> adminGetInterfaceList(InterfaceInfoListSearchRequest interfaceInfoCallRequest);
 
+    Result<InterfaceInfoAdminQueryDetailRequest> getInterfaceDetailById(String id);
 }

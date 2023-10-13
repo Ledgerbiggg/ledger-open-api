@@ -2,12 +2,11 @@ package com.ledger.api_interface.controller;
 
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.ledger.api_common.enums.ContentTypeEnum;
 import com.ledger.api_common.model.query.PageQuery;
 import com.ledger.api_common.response.Result;
-import com.ledger.api_common.util.HttpUtil;
 import com.ledger.api_interface.model.dto.InterfaceInfo.InterfaceInfoCallRequest;
 import com.ledger.api_interface.model.dto.InterfaceInfo.InterfaceInfoListSearchRequest;
+import com.ledger.api_interface.model.vo.InterfaceInfo.InterfaceInfoAdminQueryDetailRequest;
 import com.ledger.api_interface.model.vo.InterfaceInfo.InterfaceInfoAdminQueryListRequest;
 import com.ledger.api_interface.model.vo.InterfaceInfo.InterfaceInfoQueryListRequest;
 import com.ledger.api_interface.model.vo.InterfaceInfo.InterfaceInfoWithParams;
@@ -18,9 +17,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 
 @RestController
@@ -57,12 +53,27 @@ public class InterfaceInfoController {
     public Result<List<InterfaceInfoAdminQueryListRequest>> adminGetInterfaceList(InterfaceInfoListSearchRequest interfaceInfoCallRequest) {
         return interfaceInfoService.adminGetInterfaceList(interfaceInfoCallRequest);
     }
-    @PostMapping("/admin/saveInterfaceList")
+
+    @GetMapping("/admin/getInterfaceDetailById")
     @PreAuthorize("hasAnyAuthority('admin')")
-    @ApiOperation("管理员保存接口信息") // 添加 API 操作说明
-    public Result<List<InterfaceInfoAdminQueryListRequest>> adminSaveInterfaceList(InterfaceInfoListSearchRequest interfaceInfoCallRequest) {
-        return interfaceInfoService.adminGetInterfaceList(interfaceInfoCallRequest);
+    @ApiOperation("管理员获取所有的接口详细信息") // 添加 API 操作说明
+    public Result<InterfaceInfoAdminQueryDetailRequest> getInterfaceDetailById(String id) {
+        return interfaceInfoService.getInterfaceDetailById(id);
     }
+
+
+
+
+
+
+
+
+//    @PostMapping("/admin/saveInterfaceList")
+//    @PreAuthorize("hasAnyAuthority('admin')")
+//    @ApiOperation("管理员保存接口信息") // 添加 API 操作说明
+//    public Result<List<InterfaceInfoAdminQueryListRequest>> adminSaveInterfaceList(InterfaceInfoListSearchRequest interfaceInfoCallRequest) {
+//        return interfaceInfoService.adminGetInterfaceList(interfaceInfoCallRequest);
+//    }
 
 
 }

@@ -62,16 +62,20 @@ const routes = [
                 props: true, // 启用路由参数传递
             },
             {
-                path: '/admin/interfaceDetailPage', // 子路由的路径，会被追加到父路由路径后面，例如：/child1
-                component: () => import('@/page/InterfaceDetailPage.vue'), // 子路由的组件
-                name: 'interfaceDetailPage', // 子路由的名称
-                props: true, // 启用路由参数传递
-            },
-            {
                 path: '/account/center', // 子路由的路径，会被追加到父路由路径后面，例如：/child1
                 component: () => import('@/page/account/AccountSetting'), // 子路由的组件
                 name: 'accountCenter', // 子路由的名称
                 props: true, // 启用路由参数传递
+            },
+            {
+                path: '/admin/interfaceDetailPageSelect/:id', // 子路由的路径，会被追加到父路由路径后面，例如：/child1
+                component: () => import('@/page/InterfaceDetailPageSelect.vue'), // 子路由的组件
+                name: 'interfaceDetailPageSelect', // 子路由的名称
+            },
+            {
+                path: '/admin/interfaceDetailPageEdit/:id', // 子路由的路径，会被追加到父路由路径后面，例如：/child1
+                component: () => import('@/page/InterfaceDetailPageEdit.vue'), // 子路由的组件
+                name: 'interfaceDetailPageEdit', // 子路由的名称
             },
         ]
     },

@@ -48,7 +48,7 @@
             <el-button
                 size="small"
                 type="primary"
-                @click="handleEdit(scope.row)"
+                @click="handleSelect(scope.row)"
                 :icon="View"/>
           </span>
           <span class="btn">
@@ -132,10 +132,16 @@ watch(searchParams, () => {
 
 const handleEdit = (row) => {
   // 编辑按钮的点击事件处理逻辑
-  console.log('编辑', row)
-  store.commit("setInterfaceDetail", row)
   router.push({
-    path: '/admin/interfaceDetailPage',
+    path: '/admin/interfaceDetailPageEdit/'+ row.id,
+  })
+}
+
+const handleSelect = (row) => {
+  // 编辑按钮的点击事件处理逻辑
+  // store.commit("setInterfaceDetail", row)
+  router.push({
+    path: '/admin/interfaceDetailPageSelect/'+ row.id,
   })
 }
 

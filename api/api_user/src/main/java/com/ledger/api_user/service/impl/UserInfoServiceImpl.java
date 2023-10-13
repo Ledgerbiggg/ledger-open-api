@@ -123,9 +123,17 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
 
         String name = nameWithFileExtension.substring(0,nameWithFileExtension.lastIndexOf("."));
         String fileExtension = nameWithFileExtension.substring(nameWithFileExtension.lastIndexOf(".") + 1);
+
         uploadVo.setName(name);
         uploadVo.setFileExtension(fileExtension);
         uploadVo.setNameWithFileExtension(nameWithFileExtension);
+
+        String username = authentication.getUsername();
+
+        UserInfo userByUsername = getUserByUsername(username);
+        userByUsername.setAvatar(FileUtil.byteToBase64(FileUtil.downloadFile(nameWithFileExtension,profile)));
+        saveOrUpdate(userByUsername);
+
         return Result.success(uploadVo);
 
     }
@@ -155,9 +163,6 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
         UserInfo userInfo = getUserByUsername(userDetails.getUsername());
 
         UserInfoVo userInfoVo = BeanUtil.copyProperties(userInfo, UserInfoVo.class);
-
-//        FileUtil.
-
 
         return Result.success(userInfoVo);
     }

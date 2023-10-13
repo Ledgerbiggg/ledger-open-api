@@ -24,9 +24,12 @@ import com.ledger.api_interface.model.domain.RequestParameters;
 import com.ledger.api_interface.model.domain.ResponseParameters;
 import com.ledger.api_interface.model.dto.InterfaceInfo.InterfaceInfoCallRequest;
 import com.ledger.api_interface.model.dto.InterfaceInfo.InterfaceInfoListSearchRequest;
+import com.ledger.api_interface.model.vo.InterfaceInfo.InterfaceInfoAdminQueryDetailRequest;
 import com.ledger.api_interface.model.vo.InterfaceInfo.InterfaceInfoAdminQueryListRequest;
 import com.ledger.api_interface.model.vo.InterfaceInfo.InterfaceInfoQueryListRequest;
 import com.ledger.api_interface.model.vo.InterfaceInfo.InterfaceInfoWithParams;
+import com.ledger.api_interface.model.vo.RequestParameters.RequestParametersVo;
+import com.ledger.api_interface.model.vo.ResponseParameters.ResponseParametersVo;
 import com.ledger.api_interface.service.CallHistoryService;
 import com.ledger.api_interface.service.InterfaceInfoService;
 import com.ledger.api_interface.service.RequestParametersService;
@@ -176,6 +179,38 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
                 list.stream().map(i ->
                         BeanUtil.copyProperties(i, InterfaceInfoAdminQueryListRequest.class)).collect(Collectors.toList());
         return Result.success(collect);
+    }
+
+    @Override
+    public Result<InterfaceInfoAdminQueryDetailRequest> getInterfaceDetailById(String id) {
+
+        InterfaceInfo interfaceInfo = getById(id);
+
+        InterfaceInfoAdminQueryDetailRequest interfaceInfoAdminQueryDetailRequest =
+                BeanUtil.copyProperties(interfaceInfo, InterfaceInfoAdminQueryDetailRequest.class);
+
+        LambdaQueryWrapper<RequestParameters> requestParametersLambdaQueryWrapper = new LambdaQueryWrapper<>();
+
+        requestParametersLambdaQueryWrapper.eq(RequestParameters::getApi_id,id);
+
+        List<RequestParameters> requestParameters = requestParametersService.list(requestParametersLambdaQueryWrapper);
+
+        LambdaQueryWrapper<ResponseParameters> responseParametersLambdaQueryWrapper = new LambdaQueryWrapper<>();
+
+        responseParametersLambdaQueryWrapper.eq(ResponseParameters::getApi_id,id);
+
+        List<ResponseParameters> responseParameters = responseParametersService.list(responseParametersLambdaQueryWrapper);
+
+
+        List<RequestParametersVo> requestParametersVos = requestParameters.stream().map(i -> BeanUtil.copyProperties(i, RequestParametersVo.class)).collect(Collectors.toList());
+        List<ResponseParametersVo> responseParametersVos = responseParameters.stream().map(i -> BeanUtil.copyProperties(i, ResponseParametersVo.class)).collect(Collectors.toList());
+
+
+        interfaceInfoAdminQueryDetailRequest.setRequestParametersVos(requestParametersVos);
+        interfaceInfoAdminQueryDetailRequest.setResponseParametersVos(responseParametersVos);
+
+        return Result.success(interfaceInfoAdminQueryDetailRequest);
+
     }
 
 
