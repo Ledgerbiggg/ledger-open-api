@@ -51,20 +51,7 @@
                 @click="handleSelect(scope.row)"
                 :icon="View"/>
           </span>
-          <span class="btn">
-            <el-button
-                size="small"
-                type="primary"
-                @click="handleEdit(scope.row)"
-                :icon="Edit"/>
-          </span>
-          <span class="btn">
-            <el-button
-                size="small"
-                type="primary"
-                @click="handleEdit(scope.row)"
-                :icon="Delete"/>
-          </span>
+
         </template>
       </el-table-column>
     </el-table>
@@ -73,8 +60,6 @@
 <script setup>
 import {
   View,
-  Edit,
-  Delete,
 } from '@element-plus/icons-vue'
 import {computed, onMounted, ref, watch} from 'vue';
 import http from "@/js/http";
@@ -130,12 +115,12 @@ watch(searchParams, () => {
   getOrderList(param)
 })
 
-const handleEdit = (row) => {
-  // 编辑按钮的点击事件处理逻辑
-  router.push({
-    path: '/admin/interfaceDetailPageEdit/'+ row.id,
-  })
-}
+// const handleEdit = (row) => {
+//   // 编辑按钮的点击事件处理逻辑
+//   router.push({
+//     path: '/admin/interfaceDetailPageEdit/'+ row.id,
+//   })
+// }
 
 const handleSelect = (row) => {
   // 编辑按钮的点击事件处理逻辑

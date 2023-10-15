@@ -51,17 +51,18 @@
     <v-md-preview :text="'```json\n'+props.example" @copy-code-success="handleCopyCodeSuccess"></v-md-preview>
   </div>
   <div class="imageBox">
-    <img :src="'data:image/png;base64,'+props.example" alt="没有"/>
+    <div v-if="props.resp_type==='IMAGE'">
+    <img :src="imageUrl" alt="没有"/>
+    </div>
   </div>
 </template>
 <script setup>
-
-
-import {defineProps} from 'vue';
+import {defineProps, ref} from 'vue';
 import {onMounted} from "vue";
 import {ElMessage} from 'element-plus';
+import uploadUtil from "@/js/uploadUtil";
 
-
+const imageUrl=ref("");
 const props = defineProps({
   res: Array,
   resp: Array,
@@ -70,7 +71,11 @@ const props = defineProps({
 });
 
 onMounted(() => {
-  console.log("props", props.example)
+  setTimeout(async () => {
+    if (props.resp_type === 'IMAGE') {
+      imageUrl.value = await uploadUtil.upload(props.example);
+    }
+  },800)
 })
 
 const handleCopyCodeSuccess = () => {

@@ -39,6 +39,7 @@
       </div>
     </div>
   </div>
+  <div class="addInterface" @click="addInterface"><el-icon><Plus /></el-icon>新增接口</div>
 
 </template>
 <script setup>
@@ -46,6 +47,7 @@ import {ref} from 'vue'
 import store from "@/store/store";
 import {ElMessage} from "element-plus";
 import {deepClone} from "@/js/ObjectClone";
+import router from "@/router/router";
 
 const searchList = ref([
   {
@@ -143,6 +145,10 @@ const getOne=(arr)=>{
   }
 }
 
+const addInterface=()=>{
+  router.push("/admin/addInterface")
+}
+
 
 
 
@@ -157,6 +163,17 @@ const getOne=(arr)=>{
 }
 </style>
 <style lang="less" scoped>
+.addInterface{
+  width: 100%;
+  height: 5vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  margin-bottom: 3vh;
+  border-radius: 8px;
+  font-size: 13px;
+}
 .interfaceSearchBox {
   width: 100%;
   height: 20vh;
@@ -164,7 +181,7 @@ const getOne=(arr)=>{
   align-items: center;
   background: #ffffff;
   border-radius: 8px;
-  margin-bottom: 7vh;
+  margin-bottom: 3vh;
 
   .searchBox {
     position: relative;

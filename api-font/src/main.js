@@ -3,6 +3,10 @@ import App from '@/App.vue';
 import ElementPlus from 'element-plus';
 import store from '@/store/store';
 import router from '@/router/router';
+import DialogCenter from "@/components/dialog/DialogCenter.vue";
+import DialogDraggable from "@/components/dialog/DialogDraggable.vue";
+import FormNested from "@/components/dialog/FormNested.vue";
+import RequestParametersEdit from "@/components/dialog/RequestParametersEdit.vue";
 
 import 'element-plus/dist/index.css';
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
@@ -28,8 +32,10 @@ VMdPreview.use(githubTheme, {
 VMdPreview.use(createCopyCodePlugin());
 
 app.use(VMdPreview);
-
-
+app.component("FormNested", FormNested);
+app.component("DialogCenter", DialogCenter);
+app.component("DialogDraggable", DialogDraggable);
+app.component("RequestParametersEdit", RequestParametersEdit);
 app.use(ElementPlus);
 app.use(store);
 app.use(router);

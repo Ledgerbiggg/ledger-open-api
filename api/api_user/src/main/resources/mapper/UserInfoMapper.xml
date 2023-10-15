@@ -16,11 +16,13 @@
             <result property="avatar" column="avatar" jdbcType="VARCHAR"/>
             <result property="mail" column="mail" jdbcType="VARCHAR"/>
             <result property="invitation_code" column="invitation_code" jdbcType="VARCHAR"/>
+            <result property="accessKey" column="accessKey" jdbcType="VARCHAR"/>
+            <result property="secretKey" column="secretKey" jdbcType="VARCHAR"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         id,username,password,
         enabled,account_non_expired,account_non_locked,
-        credentials_non_expired,authorities,avatar,invitation_code,mail
+        credentials_non_expired,authorities,avatar,invitation_code,mail,accessKey,secretKey
     </sql>
 </mapper>

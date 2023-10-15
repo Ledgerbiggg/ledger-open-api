@@ -1,7 +1,6 @@
 package com.ledger.api_user.controller;
 
 import com.ledger.api_common.response.Result;
-import com.ledger.api_user.model.domain.UserInfo;
 import com.ledger.api_user.model.dto.UserInfoLogin;
 import com.ledger.api_user.model.dto.UserInfoRegister;
 import com.ledger.api_user.model.vo.UploadVo;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
 
 @RestController
@@ -49,13 +47,23 @@ public class UserInfoController {
         return userInfoService.uploadAvatar(file);
     }
 
-    @GetMapping("/getAvatar")
-    @ApiOperation("获取头像")
-    public Result<String> getAvatar(String fileName) {
-        return userInfoService.getAvatar(fileName);
+//    @GetMapping("/getAvatar")
+//    @ApiOperation("获取头像")
+//    public Result<String> getAvatar(String fileName) {
+//        return userInfoService.getAvatar(fileName);
+//    }
+
+    @GetMapping("/getAvatarCheck")
+    @ApiOperation("校验身份")
+    public Result<String> getAvatarCheck() {
+        return userInfoService.getAvatarCheck();
     }
 
 
-
+    @GetMapping("/getAvatar")
+    @ApiOperation("获取头像")
+    public void getAvatar(String fileName,String token,HttpServletResponse response) {
+        userInfoService.getAvatar(fileName,token,response);
+    }
 
 }

@@ -1,8 +1,18 @@
 <template>
+  <RequestParametersEdit/>
+  <ResponseParametersEdit/>
+  <InterfaceDetailEdit/>
 <div style="height: 90vh;overflow: auto">
   <div class="apiDetail">
     <div class="title">
       接口详情
+      <span class="goPayment">
+        <el-button type="primary" @click="showInterfaceDialog">
+          <div class="text">
+            编辑
+          </div>
+        </el-button>
+      </span>
     </div>
     <div class="detail">
       <div class="line">
@@ -63,8 +73,8 @@
     <div class="title">
       请求参数详情
     </div>
-    <div class="table">
-      <el-table :data="interfaceDetail.requestParametersVos" style="width: 100%" :max-height="200">
+    <div class="table"  v-if="interfaceDetail.requestParametersVos.length" >
+      <el-table :data="interfaceDetail.requestParametersVos"  width="700" height="300" >
         <el-table-column label="名称" width="180">
           <template #default="scope">
             <div style="display: flex; align-items: center">
@@ -75,7 +85,7 @@
         <el-table-column label="是否必须" width="180">
           <template #default="scope">
             <div style="display: flex; align-items: center">
-              <span style="">{{ scope.row.is_required }}</span>
+              <span style="">{{ scope.row.is_required===1?'是':'否' }}</span>
             </div>
           </template>
         </el-table-column>
@@ -100,17 +110,12 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="Operations">
+        <el-table-column label="操作" width="200">
           <template #default="scope">
             <el-button size="small" @click="handleEdit(scope.$index, scope.row)"
-            >Edit</el-button
+            >编辑</el-button
             >
-            <el-button
-                    size="small"
-                    type="danger"
-                    @click="handleDelete(scope.$index, scope.row)"
-            >Delete</el-button
-            >
+
           </template>
         </el-table-column>
       </el-table>
@@ -120,8 +125,8 @@
     <div class="title">
       响应参数详情
     </div>
-    <div class="table">
-      <el-table :data="interfaceDetail.responseParametersVos" style="width: 100%" :max-height="200">
+    <div class="table" v-if="interfaceDetail.responseParametersVos.length">
+      <el-table  :data="interfaceDetail.responseParametersVos" style="width: 100%" height="300" width="900">
         <el-table-column label="名称" width="180">
           <template #default="scope">
             <div style="display: flex; align-items: center">
@@ -129,30 +134,24 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="是否必须" width="180">
+        <el-table-column label="类型" width="180">
           <template #default="scope">
             <div style="display: flex; align-items: center">
               <span style="">{{ scope.row.type }}</span>
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="类型" width="180">
+        <el-table-column label="描述" width="180">
           <template #default="scope">
             <div style="display: flex; align-items: center">
               <span style="">{{ scope.row.description }}</span>
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="Operations">
+        <el-table-column label="操作" width="200">
           <template #default="scope">
-            <el-button size="small" @click="handleEdit(scope.$index, scope.row)"
-            >Edit</el-button
-            >
-            <el-button
-                    size="small"
-                    type="danger"
-                    @click="handleDelete(scope.$index, scope.row)"
-            >Delete</el-button
+            <el-button size="small" @click="handleEdit2(scope.$index, scope.row)"
+            >编辑</el-button
             >
           </template>
         </el-table-column>
@@ -181,16 +180,24 @@ import {ElMessage} from "element-plus";
 import {useRoute} from "vue-router";
 import http from "@/js/http";
 import store from "@/store/store";
+import RequestParametersEdit from "@/components/dialog/RequestParametersEdit.vue";
+import ResponseParametersEdit from "@/components/dialog/ResponseParametersEdit.vue";
+import InterfaceDetailEdit from "@/components/dialog/InterfaceDetailEdit.vue";
 
+const showInterfaceDialog=()=>{
+  store.commit("showInterfaceEditDialog",true)
+  store.commit("setInterfaceDetails",interfaceDetail.value)
+}
 
 const handleEdit = (index, row) => {
-  console.log(index, row);
+  store.commit("showRequestParametersEditDialog",true)
+  store.commit("setRequestParameterDetails",row)
 };
 
-const handleDelete = (index, row) => {
-  console.log(index, row);
+const handleEdit2 = (index, row) => {
+  store.commit("showResponseParametersEditDialog",true)
+  store.commit("setResponseParameterDetails",row)
 };
-
 
 
 const interfaceDetail = ref({

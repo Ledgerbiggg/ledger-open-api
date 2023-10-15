@@ -5,13 +5,19 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.ledger.api_common.model.query.PageQuery;
 import com.ledger.api_common.response.Result;
 import com.ledger.api_interface.model.domain.InterfaceInfo;
+import com.ledger.api_interface.model.dto.InterfaceInfo.InterfaceInfoAdminEditDetailRequest;
 import com.ledger.api_interface.model.dto.InterfaceInfo.InterfaceInfoCallRequest;
 import com.ledger.api_interface.model.dto.InterfaceInfo.InterfaceInfoListSearchRequest;
+import com.ledger.api_interface.model.dto.InterfaceInfo.InterfaceInfoSDKCallRequest;
+import com.ledger.api_interface.model.dto.RequestParameters.RequestParametersRequest;
+import com.ledger.api_interface.model.dto.ResponseParameters.ResponseParametersRequest;
 import com.ledger.api_interface.model.vo.InterfaceInfo.InterfaceInfoAdminQueryDetailRequest;
 import com.ledger.api_interface.model.vo.InterfaceInfo.InterfaceInfoAdminQueryListRequest;
 import com.ledger.api_interface.model.vo.InterfaceInfo.InterfaceInfoQueryListRequest;
 import com.ledger.api_interface.model.vo.InterfaceInfo.InterfaceInfoWithParams;
 
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -31,4 +37,13 @@ public interface InterfaceInfoService extends IService<InterfaceInfo> {
     Result<List<InterfaceInfoAdminQueryListRequest>> adminGetInterfaceList(InterfaceInfoListSearchRequest interfaceInfoCallRequest);
 
     Result<InterfaceInfoAdminQueryDetailRequest> getInterfaceDetailById(String id);
+
+    Result<Object> externalCall(InterfaceInfoSDKCallRequest interfaceInfoSDKCallRequest, HttpServletRequest request,String id);
+
+    Result<String> modifyInterfaceRequestParameters(RequestParametersRequest requestParametersVo);
+
+    Result<String> modifyInterfaceResponseParameters(ResponseParametersRequest responseParametersRequest);
+
+    Result<String> modifyInterfaceParameters(InterfaceInfoAdminEditDetailRequest interfaceInfoAdminEditDetailRequest);
+
 }

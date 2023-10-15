@@ -13,7 +13,7 @@
             placeholder="没有心仪的接口,快搜索一下吧"
         />
       </div>
-      <div class="search" @click="call()">
+      <div class="search" @click="call()" :style="{cursor: disabled?'not-allowed':'pointer'}" :title="disabled ? '调用中,请稍后' : ''">
         调用
       </div>
     </div>
@@ -79,6 +79,8 @@ const props = defineProps({
   resp_type:String
 });
 
+const disabled=ref(false)
+
 const params = ref([{default_value: ""}])
 
 onMounted(() => {
@@ -90,6 +92,8 @@ onMounted(() => {
 const json = ref({})
 
 const call = () => {
+  if(disabled.value) return
+  disabled.value=true
   let p = {}
   if(params.value){
     params.value.forEach((item) => {
@@ -103,6 +107,7 @@ const call = () => {
     interfaceId: props.interfaceId,
     resp_type:props.resp_type
   }).then((res) => {
+    disabled.value=false
     if (res.data.code === 200) {
       ElMessage.success("调用成功")
       store.commit("call");

@@ -9,7 +9,6 @@ import com.ledger.api_user.model.vo.UploadVo;
 import com.ledger.api_user.model.vo.UserInfoVo;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -26,8 +25,13 @@ public interface UserInfoService extends IService<UserInfo> {
 
     Result<UploadVo> uploadAvatar(MultipartFile file);
 
-    Result<String> getAvatar(String fileName);
+//    Result<String> getAvatar(String fileName);
 
     Result<UserInfoVo> getUser();
+
+
+    void getAvatar(String fileName, String token, HttpServletResponse response);
+
+    Result<String> getAvatarCheck();
 
 }

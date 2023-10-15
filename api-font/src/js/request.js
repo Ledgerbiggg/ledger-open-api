@@ -54,11 +54,11 @@ service.interceptors.response.use(response => {
     if (response.data.code === 403 ) {
         window.localStorage.removeItem("unexpired")
         ElMessage.error(response.data.msg)
-        return Promise.reject(response);
+        // return Promise.reject(response);
     }
-    if(response.data.code === 401){
+    if(response.data.code === 401 || response.data.code === 500){
         ElMessage.error(response.data.msg)
-        return Promise.reject(response);
+        // return Promise.reject(response);
     }
     return response
 }, error => {

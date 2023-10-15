@@ -2,8 +2,10 @@ package com.ledger.api_user.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.io.IoUtil;
+import cn.hutool.core.util.IdUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ledger.api_common.Exception.KnowException;
 import com.ledger.api_common.response.Result;
 import com.ledger.api_common.util.FileUtil;
 import com.ledger.api_user.model.domain.SecurityUser;
@@ -30,11 +32,12 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 import java.util.StringJoiner;
 import java.util.UUID;
-
+import javax.imageio.ImageIO;
 /**
  * @author 22866
  * @description 针对表【user_info(存储用户信息)】的数据库操作Service实现
@@ -49,13 +52,10 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
     private String secret;
     @Value("${jwt.tokenHead}")
     private String tokenHead;
-
     @Resource
     private UserPermissionsService userPermissionsService;
-
     @Value("${sys.profile}")
     private String profile;
-
 
     private static final BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -101,6 +101,10 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
         userInfo.setId(userId);
         userInfo.setUsername(user.getUsername());
         userInfo.setPassword(bCryptPasswordEncoder.encode(password));
+        userInfo.setInvitation_code(IdUtil.simpleUUID().substring(0, 10));
+        userInfo.setSecretKey(IdUtil.simpleUUID());
+        userInfo.setAccessKey(IdUtil.simpleUUID());
+        userInfo.setAccount(new BigDecimal(5));
         //保存权限
         UserPermissions userPermissions = new UserPermissions();
         userPermissions.setId(UUID.randomUUID().toString());
@@ -117,11 +121,11 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
 
         String id = getUserByUsername(authentication.getUsername()).getId();
 
-        String nameWithFileExtension = FileUtil.uploadFile(file,  id, profile);
+        String nameWithFileExtension = FileUtil.uploadFile(file, id, profile);
 
         UploadVo uploadVo = new UploadVo();
 
-        String name = nameWithFileExtension.substring(0,nameWithFileExtension.lastIndexOf("."));
+        String name = nameWithFileExtension.substring(0, nameWithFileExtension.lastIndexOf("."));
         String fileExtension = nameWithFileExtension.substring(nameWithFileExtension.lastIndexOf(".") + 1);
 
         uploadVo.setName(name);
@@ -131,30 +135,30 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
         String username = authentication.getUsername();
 
         UserInfo userByUsername = getUserByUsername(username);
-        userByUsername.setAvatar(FileUtil.byteToBase64(FileUtil.downloadFile(nameWithFileExtension,profile)));
+        userByUsername.setAvatar(nameWithFileExtension);
         saveOrUpdate(userByUsername);
 
         return Result.success(uploadVo);
 
     }
 
-    @Override
-    public Result<String> getAvatar(String fileName) {
-        byte[] bytes = FileUtil.downloadFile(fileName, profile);
-
-        String base = FileUtil.byteToBase64(bytes);
-
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        UserInfo userInfo = getUserByUsername(userDetails.getUsername());
-
-        userInfo.setAvatar(base);
-
-        saveOrUpdate(userInfo);
-
-        return Result.success(base);
-
-    }
+//    @Override
+//    public Result<String> getAvatar(String fileName) {
+//        byte[] bytes = FileUtil.downloadFile(fileName, profile);
+//
+//        String base = FileUtil.byteToBase64(bytes);
+//
+//        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//
+//        UserInfo userInfo = getUserByUsername(userDetails.getUsername());
+//
+//        userInfo.setAvatar(base);
+//
+//        saveOrUpdate(userInfo);
+//
+//        return Result.success(base);
+//
+//    }
 
     @Override
     public Result<UserInfoVo> getUser() {
@@ -166,6 +170,41 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
 
         return Result.success(userInfoVo);
     }
+
+    @Override
+    public Result<String> getAvatarCheck() {
+        String token =
+                JwtUtil.createTempJwt((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal(), null,secret);
+        return Result.success(token);
+    }
+
+    @Override
+    public void getAvatar(String fileName, String token, HttpServletResponse response) {
+        boolean b = JwtUtil.validateJwt(token, secret);
+        if(!b){
+            throw new KnowException("token验证失败");
+        }
+        response.setContentType("image/jpeg");
+        ServletOutputStream outputStream = null;
+        try {
+            outputStream = response.getOutputStream();
+            byte[] bytes = FileUtil.downloadFile(fileName, profile);
+            outputStream.write(bytes);
+            outputStream.flush();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                //关闭流
+                assert outputStream != null;
+                outputStream.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+
 
     @Override
     public UserInfo getUserByUsername(String username) {

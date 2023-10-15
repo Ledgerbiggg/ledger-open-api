@@ -29,14 +29,23 @@ public class JwtUtil {
         claims.put(CLAIM_KEY_USERNAME, username);
         claims.put(CLAIM_KEY_CREATE, new Date());
         claims.put(CLAIM_Authority, auths);
-        return createJwt(claims, secret,userDetails.getUsername());
+        return createJwt(claims, secret,userDetails.getUsername(),Calendar.HOUR,30);
     }
 
-    private static String createJwt(Map<String, Object> claims, String secret, String username) {
+    public static String createTempJwt(UserDetails userDetails, List<String> auths, String secret) {
+        String username = userDetails.getUsername();
+        HashMap<String, Object> claims = new HashMap<>();
+        claims.put(CLAIM_KEY_USERNAME, username);
+        claims.put(CLAIM_KEY_CREATE, new Date());
+        claims.put(CLAIM_Authority, auths);
+        return createJwt(claims, secret,userDetails.getUsername(),Calendar.MINUTE,10);
+    }
+
+    private static String createJwt(Map<String, Object> claims, String secret, String username, Integer hour, Integer minute) {
         Date now = new Date();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(now);
-        calendar.add(Calendar.HOUR, 30);
+        calendar.add(hour, minute);
         Date futureDate = calendar.getTime();
         return Jwts.builder()
                 .setClaims(claims)
@@ -45,6 +54,8 @@ public class JwtUtil {
                 .signWith(SignatureAlgorithm.HS512, secret) // 加密签名
                 .compact();
     }
+
+
 
     /**
      * 校验jwt的生成的token
@@ -86,7 +97,7 @@ public class JwtUtil {
     }
     public static String refreshToken(String jwtToken, String secret) {
         Claims claimsFromToken = getClaimsFromToken(jwtToken, secret);
-        return createJwt(claimsFromToken, secret, claimsFromToken.getSubject());
+        return createJwt(claimsFromToken, secret, claimsFromToken.getSubject(),Calendar.HOUR,30);
     }
 
     /**

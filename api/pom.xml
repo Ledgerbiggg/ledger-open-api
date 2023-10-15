@@ -35,20 +35,37 @@
         <fastjson.version>1.2.83</fastjson.version>
         <jjwt.version>0.9.1</jjwt.version>
         <kaptcha.version>0.0.9</kaptcha.version>
+        <hibernate-validator.verion>6.2.0.Final</hibernate-validator.verion>
+        <jaxb-api.version>2.3.1</jaxb-api.version>
+        <validation-api.version>2.0.1.Final</validation-api.version>
+        <jakarta.validation-api.version>3.0.0</jakarta.validation-api.version>
+
+
     </properties>
 
     <dependencies>
+
+        <!--这有可能是因为SpringBoot项目结合jwt进行登录时出现的问题，因为jdk版本太高导致的。-->
         <dependency>
             <groupId>javax.xml.bind</groupId>
             <artifactId>jaxb-api</artifactId>
-            <version>2.3.1</version> <!-- 使用合适的版本 -->
+            <version>${jaxb-api.version}</version>
         </dependency>
+        <!--第一种方式导入校验依赖-->
 
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>${validation-api.version}</version>
+        </dependency>
+        <!--第二种方式导入校验依赖-->
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+        </dependency>
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
-            <!--            <version>2.2.6.RELEASE</version>-->
-            <!--openfeign里面有复载均衡，所以这里必须注释掉，不然会冲突-->
             <exclusions>
                 <exclusion>
                     <groupId>org.springframework.cloud</groupId>

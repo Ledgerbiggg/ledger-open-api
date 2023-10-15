@@ -77,6 +77,11 @@ const routes = [
                 component: () => import('@/page/InterfaceDetailPageEdit.vue'), // 子路由的组件
                 name: 'interfaceDetailPageEdit', // 子路由的名称
             },
+            {
+                path: '/admin/addInterface', // 子路由的路径，会被追加到父路由路径后面，例如：/child1
+                component: () => import('@/page/AddInterface.vue'), // 子路由的组件
+                name: 'interfaceDetailPageEdit', // 子路由的名称
+            },
         ]
     },
 

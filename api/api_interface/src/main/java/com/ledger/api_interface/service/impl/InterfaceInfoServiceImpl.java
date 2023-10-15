@@ -7,6 +7,8 @@ import cn.hutool.core.util.StrUtil;
 import java.io.*;
 import java.util.Base64;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -22,8 +24,12 @@ import com.ledger.api_interface.model.domain.CallHistory;
 import com.ledger.api_interface.model.domain.InterfaceInfo;
 import com.ledger.api_interface.model.domain.RequestParameters;
 import com.ledger.api_interface.model.domain.ResponseParameters;
+import com.ledger.api_interface.model.dto.InterfaceInfo.InterfaceInfoAdminEditDetailRequest;
 import com.ledger.api_interface.model.dto.InterfaceInfo.InterfaceInfoCallRequest;
 import com.ledger.api_interface.model.dto.InterfaceInfo.InterfaceInfoListSearchRequest;
+import com.ledger.api_interface.model.dto.InterfaceInfo.InterfaceInfoSDKCallRequest;
+import com.ledger.api_interface.model.dto.RequestParameters.RequestParametersRequest;
+import com.ledger.api_interface.model.dto.ResponseParameters.ResponseParametersRequest;
 import com.ledger.api_interface.model.vo.InterfaceInfo.InterfaceInfoAdminQueryDetailRequest;
 import com.ledger.api_interface.model.vo.InterfaceInfo.InterfaceInfoAdminQueryListRequest;
 import com.ledger.api_interface.model.vo.InterfaceInfo.InterfaceInfoQueryListRequest;
@@ -44,6 +50,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -73,6 +81,12 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
 
     @Resource
     private CallHistoryService callHistoryService;
+
+    @Resource
+    private InterfaceInfoService interfaceInfoService;
+
+    @Value("${address}")
+    private String address;
 
 
     @Override
@@ -109,6 +123,8 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
         interfaceInfoWithParams.setRequestParametersList(requestParametersList);
         interfaceInfoWithParams.setResponseParametersList(responseParametersList);
         BeanUtil.copyProperties(interfaceInfo, interfaceInfoWithParams);
+
+        interfaceInfoWithParams.setUrl(address+"/"+interfaceInfo.getId());
         return Result.success(interfaceInfoWithParams);
     }
 
@@ -117,7 +133,9 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = userDetails.getUsername();
         UserInfo userByUsername = userInfoService.getUserByUsername(username);
-        BigDecimal divide = userByUsername.getAccount().subtract(new BigDecimal("1"));
+        InterfaceInfo interfaceInfo = interfaceInfoService.getById(interfaceInfoCallRequest.getInterfaceId());
+        String url = interfaceInfo.getUrl();
+        BigDecimal divide = userByUsername.getAccount().subtract(new BigDecimal(interfaceInfo.getConsume()));
         if (divide.compareTo(new BigDecimal(0)) < 0) {
             throw new KnowException("余额不足");
         }
@@ -127,7 +145,6 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
         userInfoService.updateById(userByUsername);
         Object jsonObject = "";
         String method = interfaceInfoCallRequest.getMethod();
-        String url = interfaceInfoCallRequest.getUrl();
         HashMap<String, Object> params = interfaceInfoCallRequest.getParams();
         String respType = interfaceInfoCallRequest.getResp_type();
         if ("POST".equalsIgnoreCase(method)) {
@@ -213,6 +230,88 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
 
     }
 
+    @Override
+    public Result<Object> externalCall(InterfaceInfoSDKCallRequest interfaceInfoSDKCallRequest, HttpServletRequest request,String id) {
+        String accessKey = request.getHeader("AccessKey");
+        String secretKey = request.getHeader("SecretKey");
+        LambdaQueryWrapper<UserInfo> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(UserInfo::getAccessKey, accessKey);
+        wrapper.eq(UserInfo::getSecretKey, secretKey);
+        UserInfo userInfo = userInfoService.getOne(wrapper);
+        if(userInfo == null){
+            throw new KnowException("错误的AccessKey或者错误的SecretKey");
+        }
+        InterfaceInfo interfaceInfo = interfaceInfoService.getById(id);
+        String url = interfaceInfo.getUrl();
+        BigDecimal divide = userInfo.getAccount().subtract(new BigDecimal(interfaceInfo.getConsume()));
+        if (divide.compareTo(new BigDecimal(0)) < 0) {
+            throw new KnowException("余额不足");
+        }
+        userInfo.setAccount(divide);
+        //调用次数加一
+        interfaceInfoMapper.addCount(id);
+        userInfoService.updateById(userInfo);
+        Object jsonObject = "";
+        String method = interfaceInfoSDKCallRequest.getMethod();
+        HashMap<String, Object> params = interfaceInfoSDKCallRequest.getParams();
+        String respType = interfaceInfoSDKCallRequest.getResp_type();
+        if ("POST".equalsIgnoreCase(method)) {
+            if ("JSON".equalsIgnoreCase(respType)) {
+                jsonObject = HttpUtil.postJson(url, params, null);
+            } else if ("IMAGE".equalsIgnoreCase(respType)) {
+                byte[] bytes = HttpUtil.getByteArr(url, params, null);
+                jsonObject = Base64.getEncoder().encodeToString(bytes);
+            }else {
+                throw new KnowException("不正确的返回结果格式");
+            }
+        } else if ("GET".equalsIgnoreCase(method)) {
+            if ("JSON".equalsIgnoreCase(respType)) {
+                jsonObject = HttpUtil.getJson(url, params, null);
+            } else if ("IMAGE".equalsIgnoreCase(respType)) {
+                byte[] bytes = HttpUtil.getByteArr(url, params, null);
+                jsonObject = FileUtil.byteToBase64(bytes);
+            }else {
+                throw new KnowException("不正确的返回结果格式");
+            }
+        } else {
+            throw new KnowException("不正确的调用方法");
+        }
+        String userId = userInfo.getId();
+        if ("JSON".equalsIgnoreCase(respType)) {
+            CallHistory callHistory = new CallHistory();
+            callHistory.setUser_id(userId);
+            callHistory.setCall_time(LocalDateTime.now());
+            callHistory.setInsterface_id(id);
+            callHistory.setResult(jsonObject.toString());
+            callHistoryService.save(callHistory);
+        }
+        return Result.success(jsonObject);
+    }
+
+    @Override
+    public Result<String> modifyInterfaceRequestParameters(RequestParametersRequest requestParametersVo) {
+        RequestParameters requestParameters = BeanUtil.copyProperties(requestParametersVo, RequestParameters.class);
+        requestParametersService.saveOrUpdate(requestParameters);
+        return Result.success("操作成功");
+    }
+
+    @Override
+    public Result<String> modifyInterfaceResponseParameters(ResponseParametersRequest responseParametersRequest) {
+        ResponseParameters responseParameters = BeanUtil.copyProperties(responseParametersRequest, ResponseParameters.class);
+        responseParametersService.saveOrUpdate(responseParameters);
+        return Result.success("操作成功");
+    }
+
+    @Override
+    public Result<String> modifyInterfaceParameters(InterfaceInfoAdminEditDetailRequest interfaceInfoAdminEditDetailRequest) {
+        InterfaceInfo interfaceInfo = BeanUtil.copyProperties(interfaceInfoAdminEditDetailRequest, InterfaceInfo.class);
+
+        Object parse = JSON.parse(interfaceInfoAdminEditDetailRequest.getExample());
+
+        interfaceInfo.setExample(parse.toString());
+        saveOrUpdate(interfaceInfo);
+        return Result.success("操作成功");
+    }
 
 }
 

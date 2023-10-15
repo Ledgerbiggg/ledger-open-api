@@ -3,10 +3,7 @@ package com.ledger.api_common.util;
 import com.ledger.api_common.Exception.KnowException;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.Base64;
 
 public class FileUtil {
@@ -17,6 +14,16 @@ public class FileUtil {
         }
         String originalFilename = file.getOriginalFilename();
         if (originalFilename != null && !originalFilename.isEmpty()) {
+            File directory = new File(profile);
+            // 检查目录是否存在，如果不存在，则创建它
+            if (!directory.exists()) {
+                boolean created = directory.mkdirs();
+                if (created) {
+                    System.out.println("目录已创建");
+                } else {
+                    System.out.println("无法创建目录");
+                }
+            }
             String fileExtension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
             try {
                 FileOutputStream fileOutputStream = new FileOutputStream(profile + name + "." + fileExtension);

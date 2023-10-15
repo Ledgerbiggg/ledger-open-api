@@ -50,6 +50,10 @@ spring:
 
       default-filters:
         - RewritePath=/api/(?<segment>.*), /$\{segment} # 默认的过滤器,将所有的请求的/api去掉
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
 
 
 jwt:

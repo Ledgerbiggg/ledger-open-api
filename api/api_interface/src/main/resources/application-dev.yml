@@ -1,3 +1,9 @@
 sys:
   # 文件路径 示例（ Windows配置D:/attach/data/uploadPath，Linux配置 /home/data/uploadPath）
   profile: C:/attach/data/uploadPath
+
+
+address: http://localhost:8080/api/interfaceInfo
+
+
+
