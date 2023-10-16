@@ -23,14 +23,14 @@
     <div class="tableBox">
       <table>
         <thead>
-        <th style="width: 15vw">参数名称</th>
-        <th style="width: 15vw">参数</th>
+        <th style="width: 10vw">参数名称</th>
+        <th style="width: 28vw">参数描述</th>
         <th style="width: 10vw">参数值</th>
         </thead>
         <tbody>
         <tr v-for="(item, index) in props.res" :key="index">
-          <td>{{ item.description }}<span class="markMust">{{ item.is_required === 1 ? '*' : '' }} </span></td>
           <td>{{ item.name }}</td>
+          <td>{{ item.description }}<span class="markMust">{{ item.is_required === 1 ? '*' : '' }} </span></td>
           <td v-if="params[index]" style="width: 25vw">
             <el-input
                 v-model="params[index].default_value"
@@ -60,7 +60,7 @@
         </v-md-preview>
       </div>
       <div v-if="props.resp_type==='IMAGE'&& Object.keys(json).length" class="imageBox">
-        <img :src="json"/>
+        <img style="width: 50%" :src="json"/>
       </div>
     </div>
   </div>

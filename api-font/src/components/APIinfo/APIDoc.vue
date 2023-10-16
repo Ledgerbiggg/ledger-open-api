@@ -3,15 +3,15 @@
   <div class="tableBox">
     <table>
       <thead>
-      <th style="width: 15vw">参数名称</th>
+      <th style="width: 10vw">参数名称</th>
       <th style="width: 10vw">必选</th>
       <th style="width: 10vw">类型</th>
-      <th style="width: 15vw">描述</th>
+      <th style="width: 25vw">描述</th>
       </thead>
       <tbody>
       <tr v-for="(item, index) in props.res" :key="index">
-        <td>{{ item.name }} <span class="markMust">{{item.is_required === 1 ? '*' : ''}} </span></td>
-        <td>{{ item.is_required===1?'是':'否' }}</td>
+        <td>{{ item.name }} <span class="markMust">{{ item.is_required === 1 ? '*' : '' }} </span></td>
+        <td>{{ item.is_required === 1 ? '是' : '否' }}</td>
         <td>{{ item.type }}</td>
         <td>{{ item.description }}</td>
       </tr>
@@ -52,7 +52,7 @@
   </div>
   <div class="imageBox">
     <div v-if="props.resp_type==='IMAGE'">
-    <img :src="imageUrl" alt="没有"/>
+      <img style="width: 50%" :src="imageUrl" alt="没有"/>
     </div>
   </div>
 </template>
@@ -62,7 +62,7 @@ import {onMounted} from "vue";
 import {ElMessage} from 'element-plus';
 import uploadUtil from "@/js/uploadUtil";
 
-const imageUrl=ref("");
+const imageUrl = ref("");
 const props = defineProps({
   res: Array,
   resp: Array,
@@ -75,7 +75,7 @@ onMounted(() => {
     if (props.resp_type === 'IMAGE') {
       imageUrl.value = await uploadUtil.upload(props.example);
     }
-  },800)
+  }, 800)
 })
 
 const handleCopyCodeSuccess = () => {
@@ -98,6 +98,7 @@ const handleCopyCodeSuccess = () => {
   display: flex;
   align-items: center;
   justify-content: center;
+
   table {
     margin: 10px;
     border-radius: 12px;
@@ -119,7 +120,8 @@ const handleCopyCodeSuccess = () => {
     font-weight: 550;
     padding-left: 0.3vw;
     text-align: left;
-    .markMust{
+
+    .markMust {
       margin-left: 3px;
       color: red;
     }
@@ -134,7 +136,8 @@ const handleCopyCodeSuccess = () => {
     background: rgba(180, 180, 180, 0.23);
   }
 }
-.imageBox{
+
+.imageBox {
   margin-bottom: 5vh;
 }
 

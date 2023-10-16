@@ -5,19 +5,19 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.ledger.api_common.model.query.PageQuery;
 import com.ledger.api_common.response.Result;
 import com.ledger.api_interface.model.domain.InterfaceInfo;
-import com.ledger.api_interface.model.dto.InterfaceInfo.InterfaceInfoAdminEditDetailRequest;
-import com.ledger.api_interface.model.dto.InterfaceInfo.InterfaceInfoCallRequest;
-import com.ledger.api_interface.model.dto.InterfaceInfo.InterfaceInfoListSearchRequest;
-import com.ledger.api_interface.model.dto.InterfaceInfo.InterfaceInfoSDKCallRequest;
+import com.ledger.api_interface.model.dto.InterfaceInfo.*;
 import com.ledger.api_interface.model.dto.RequestParameters.RequestParametersRequest;
 import com.ledger.api_interface.model.dto.ResponseParameters.ResponseParametersRequest;
 import com.ledger.api_interface.model.vo.InterfaceInfo.InterfaceInfoAdminQueryDetailRequest;
 import com.ledger.api_interface.model.vo.InterfaceInfo.InterfaceInfoAdminQueryListRequest;
 import com.ledger.api_interface.model.vo.InterfaceInfo.InterfaceInfoQueryListRequest;
 import com.ledger.api_interface.model.vo.InterfaceInfo.InterfaceInfoWithParams;
+import com.ledger.api_user.model.vo.UploadVo;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -46,4 +46,12 @@ public interface InterfaceInfoService extends IService<InterfaceInfo> {
 
     Result<String> modifyInterfaceParameters(InterfaceInfoAdminEditDetailRequest interfaceInfoAdminEditDetailRequest);
 
+    Result<String> saveInterfaceParameters(InterfaceInfoAdminSaveDetailRequest interfaceInfoAdminSaveDetailRequest);
+
+
+    Result<UploadVo> uploadFile(MultipartFile file);
+
+    Result<String> getFileCheck();
+
+    void getFile(String fileName, String token, HttpServletResponse response);
 }

@@ -4,10 +4,7 @@ package com.ledger.api_interface.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ledger.api_common.model.query.PageQuery;
 import com.ledger.api_common.response.Result;
-import com.ledger.api_interface.model.dto.InterfaceInfo.InterfaceInfoAdminEditDetailRequest;
-import com.ledger.api_interface.model.dto.InterfaceInfo.InterfaceInfoCallRequest;
-import com.ledger.api_interface.model.dto.InterfaceInfo.InterfaceInfoListSearchRequest;
-import com.ledger.api_interface.model.dto.InterfaceInfo.InterfaceInfoSDKCallRequest;
+import com.ledger.api_interface.model.dto.InterfaceInfo.*;
 import com.ledger.api_interface.model.dto.RequestParameters.RequestParametersRequest;
 import com.ledger.api_interface.model.dto.ResponseParameters.ResponseParametersRequest;
 import com.ledger.api_interface.model.vo.InterfaceInfo.InterfaceInfoAdminQueryDetailRequest;
@@ -16,15 +13,18 @@ import com.ledger.api_interface.model.vo.InterfaceInfo.InterfaceInfoQueryListReq
 import com.ledger.api_interface.model.vo.InterfaceInfo.InterfaceInfoWithParams;
 import com.ledger.api_interface.model.vo.RequestParameters.RequestParametersVo;
 import com.ledger.api_interface.service.InterfaceInfoService;
+import com.ledger.api_user.model.vo.UploadVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @RestController
@@ -97,12 +97,33 @@ public class InterfaceInfoController {
         return interfaceInfoService.modifyInterfaceParameters(interfaceInfoAdminEditDetailRequest);
     }
 
-//    @PostMapping("/admin/saveInterfaceList")
-//    @PreAuthorize("hasAnyAuthority('admin')")
-//    @ApiOperation("管理员保存接口信息") // 添加 API 操作说明
-//    public Result<List<InterfaceInfoAdminQueryListRequest>> adminSaveInterfaceList(InterfaceInfoListSearchRequest interfaceInfoCallRequest) {
-//        return interfaceInfoService.adminGetInterfaceList(interfaceInfoCallRequest);
-//    }
+    @PostMapping("/admin/saveInterfaceParameters")
+    @PreAuthorize("hasAnyAuthority('admin')")
+    @ApiOperation("管理员修保存新的接口信息") // 添加 API 操作说明
+    public Result<String> saveInterfaceParameters(@RequestBody InterfaceInfoAdminSaveDetailRequest interfaceInfoAdminSaveDetailRequest) {
+        return interfaceInfoService.saveInterfaceParameters(interfaceInfoAdminSaveDetailRequest);
+    }
+
+    @PostMapping("/uploadFile")
+    @ApiOperation("上传文件")
+    public Result<UploadVo> uploadFile(@RequestBody MultipartFile file) {
+        return interfaceInfoService.uploadFile(file);
+    }
+
+    @GetMapping("/getFileCheck")
+    @ApiOperation("校验身份")
+    public Result<String> getFileCheck() {
+        return interfaceInfoService.getFileCheck();
+    }
+
+
+    @GetMapping("/getFile")
+    @ApiOperation("获取文件")
+    public void getFile(String fileName, String token, HttpServletResponse response) {
+        interfaceInfoService.getFile(fileName,token,response);
+    }
+
+
 
 
 }

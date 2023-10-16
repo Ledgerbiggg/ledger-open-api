@@ -47,23 +47,17 @@ public class UserInfoController {
         return userInfoService.uploadAvatar(file);
     }
 
+//    @GetMapping("/getAvatarCheck")
+//    @ApiOperation("校验身份")
+//    public Result<String> getAvatarCheck() {
+//        return userInfoService.getAvatarCheck();
+//    }
+//
+//
 //    @GetMapping("/getAvatar")
 //    @ApiOperation("获取头像")
-//    public Result<String> getAvatar(String fileName) {
-//        return userInfoService.getAvatar(fileName);
+//    public void getAvatar(String fileName,String token,HttpServletResponse response) {
+//        userInfoService.getAvatar(fileName,token,response);
 //    }
-
-    @GetMapping("/getAvatarCheck")
-    @ApiOperation("校验身份")
-    public Result<String> getAvatarCheck() {
-        return userInfoService.getAvatarCheck();
-    }
-
-
-    @GetMapping("/getAvatar")
-    @ApiOperation("获取头像")
-    public void getAvatar(String fileName,String token,HttpServletResponse response) {
-        userInfoService.getAvatar(fileName,token,response);
-    }
 
 }

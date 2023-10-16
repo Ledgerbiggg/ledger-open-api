@@ -12,6 +12,9 @@
     <artifactId>api_common</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
+    <properties>
+        <httpclient.version>4.5.13</httpclient.version>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -21,6 +24,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
+        <!--        <dependency>-->
+<!--            <groupId>org.apache.httpcomponents</groupId>-->
+<!--            <artifactId>httpclient</artifactId>-->
+<!--            <version>${httpclient.version}</version> &lt;!&ndash; 使用合适的版本 &ndash;&gt;-->
+<!--        </dependency>-->
     </dependencies>
 
 

@@ -57,7 +57,7 @@ service.interceptors.response.use(response => {
         // return Promise.reject(response);
     }
     if(response.data.code === 401 || response.data.code === 500){
-        ElMessage.error(response.data.msg)
+        ElMessage.error(response.data.data)
         // return Promise.reject(response);
     }
     return response

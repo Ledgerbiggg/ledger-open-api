@@ -85,13 +85,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 "/swagger-ui.html",
                 "/doc.html",
                 "/user/captcha",
-                "/user/getAvatar",
                 "/user/login",
                 "/user/logout",
                 "/user/register",
                 "/order/pay",
                 "/order/notify",
-                "/interfaceInfo/externalCall"
+                "/interfaceInfo/externalCall",
+                "/interfaceInfo/getFile"
                 );
 
     }

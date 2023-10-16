@@ -19,8 +19,10 @@ export default createStore({
             docLink: "https://www.baidu.com",
             //用户协议
             userAgreement: "https://www.baidu.com",
-            //上传头像地址
+            //上传文件地址
             uploadAvatar: "http://localhost/api/user/uploadAvatar",
+            //上传文件地址
+            uploadFile: "http://localhost/api/interfaceInfo/uploadFile",
         },
         //接口历史结果弹窗
         showResultDialog: false,
@@ -58,7 +60,17 @@ export default createStore({
         //导航
         active: 1,
         //添加接口
-        interfaceAdd: {},
+        interfaceAdd: {
+            name: '',
+            status: 1,
+            consume: 1,
+            method: 'GET',
+            description: '',
+            url: '',
+            img_url: '',
+            resp_type: 'JSON',
+            example: ''
+        },
         //添加请求参数
         requestParameters:[],
         //添加响应参数

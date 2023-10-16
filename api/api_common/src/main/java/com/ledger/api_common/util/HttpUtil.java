@@ -1,17 +1,30 @@
 package com.ledger.api_common.util;
 
-
+import org.apache.http.conn.ssl.NoopHostnameVerifier;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.conn.ssl.TrustStrategy;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.ssl.SSLContexts;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.ClientHttpRequestFactory;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.web.client.RestTemplate;
 import com.alibaba.fastjson.JSON;
 import com.ledger.api_common.enums.ContentTypeEnum;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.RestTemplate;
 
+import javax.net.ssl.SSLContext;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.X509Certificate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringJoiner;
@@ -20,8 +33,34 @@ public class HttpUtil {
     private static final RestTemplate restTemplate;
 
     static {
-        restTemplate = new RestTemplate();
+        try {
+            restTemplate = new RestTemplate(generateHttpRequestFactory());
+        } catch (NoSuchAlgorithmException | KeyManagementException | KeyStoreException e) {
+            throw new RuntimeException(e);
+        }
     }
+
+    public static ClientHttpRequestFactory simpleClientHttpRequestFactory(){
+        HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
+        factory.setConnectTimeout(15000);
+        factory.setReadTimeout(5000);
+        return factory;
+    }
+    public static HttpComponentsClientHttpRequestFactory generateHttpRequestFactory()
+            throws NoSuchAlgorithmException, KeyManagementException, KeyStoreException
+    {
+        TrustStrategy acceptingTrustStrategy = (x509Certificates, authType) -> true;
+        SSLContext sslContext = SSLContexts.custom().loadTrustMaterial(null, acceptingTrustStrategy).build();
+        SSLConnectionSocketFactory connectionSocketFactory = new SSLConnectionSocketFactory(sslContext, new NoopHostnameVerifier());
+
+        HttpClientBuilder httpClientBuilder = HttpClients.custom();
+        httpClientBuilder.setSSLSocketFactory(connectionSocketFactory);
+        CloseableHttpClient httpClient = httpClientBuilder.build();
+        HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
+        factory.setHttpClient(httpClient);
+        return factory;
+    }
+
 
     /**
      * get请求(通用)
