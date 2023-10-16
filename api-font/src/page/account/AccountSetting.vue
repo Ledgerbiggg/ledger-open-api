@@ -20,7 +20,7 @@
       <div class="avatarBox">
         <el-upload
             class="avatar-uploader"
-            action="http://localhost/api/user/uploadAvatar"
+            :action="store.state.linkList.uploadAvatar"
             :show-file-list="false"
             :on-success="handleAvatarSuccess"
             :before-upload="beforeAvatarUpload"
@@ -80,6 +80,7 @@ import {ElMessage} from 'element-plus'
 import http from "@/js/http";
 import {onMounted, ref} from 'vue';
 import uploadUtil from "@/js/uploadUtil";
+import store from "@/store/store";
 // import {Edit} from "@element-plus/icons-vue";
 // import store from "@/store/store";
 // import {Plus} from '@element-plus/icons-vue'

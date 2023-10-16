@@ -17,7 +17,7 @@
     <div class="interface-box">
       <div class="interface" v-for="(item,index) in interfaceList" :key="index" @click="useInterface(item.id)">
         <div class="img" :title="item.name" :style="{backgroundImage:'url('+item.img_url+')'}">
-          <div class="count" :title="'调用次数: '+item.call_count">{{ item.call_count }}</div>
+          <div class="count" :title="'调用次数: '+item.call_count">{{ item.call_count>100?'hot':item.call_count }}</div>
         </div>
         <div class="text">
           {{ item.name }}
@@ -42,6 +42,7 @@ import {ref} from 'vue'
 import {onMounted} from "vue";
 import http from "@/js/http";
 import router from "@/router/router";
+import uploadUtil from "@/js/uploadUtil";
 
 const pageParams = ref({
   pageNum: 1,
@@ -61,9 +62,11 @@ const useInterface = (id) => {
 }
 const changePage = (currentPage) => {
   pageParams.value.page = currentPage
-  http.get("/interfaceInfo/getInterfaceList", pageParams.value).then(res => {
-    console.log("interfaceInfo", res.data.data.records)
+  http.get("/interfaceInfo/getInterfaceList", pageParams.value).then(async res => {
     interfaceList.value = res.data.data.records
+    for (const i of interfaceList.value) {
+      i.img_url = await uploadUtil.upload(i.img_url)
+    }
     pageParams.value.total = res.data.data.total
     pageParams.value.pageSize = res.data.data.size
     pageParams.value.pageNum = res.data.data.current
@@ -135,7 +138,7 @@ const changePage = (currentPage) => {
       height: 90px;
       margin: 20px;
       background: no-repeat center;
-      background-size: 90px 90px;
+      background-size: contain;
       border-radius: 7px;
 
       .count {

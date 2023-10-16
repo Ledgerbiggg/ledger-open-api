@@ -56,7 +56,8 @@
       </div>
       <div class="line">
         <div class="label">接口图片</div>
-        <div class="context"><img width="80" :src="interfaceDetail.img_url" alt="图片出错"/></div>
+        <div class="context">
+          <img width="80" :src="interfaceDetail.img" alt="图片出错"/></div>
       </div>
       <div class="line">
         <div class="label">示例</div>
@@ -115,7 +116,6 @@
             <el-button size="small" @click="handleEdit(scope.$index, scope.row)"
             >编辑</el-button
             >
-
           </template>
         </el-table-column>
       </el-table>
@@ -183,6 +183,8 @@ import store from "@/store/store";
 import RequestParametersEdit from "@/components/dialog/RequestParametersEdit.vue";
 import ResponseParametersEdit from "@/components/dialog/ResponseParametersEdit.vue";
 import InterfaceDetailEdit from "@/components/dialog/InterfaceDetailEdit.vue";
+import uploadUtil from "@/js/uploadUtil";
+// import uploadUtil from "@/js/uploadUtil";
 
 const showInterfaceDialog=()=>{
   store.commit("showInterfaceEditDialog",true)
@@ -207,13 +209,18 @@ const interfaceDetail = ref({
 const route = useRoute()
 
 onMounted(() => {
-
-  http.get("/interfaceInfo/admin/getInterfaceDetailById",{id:route.params.id}).then(res=>{
+  http.get("/interfaceInfo/admin/getInterfaceDetailById",{id:route.params.id}).then(async res=>{
     console.log("getInterfaceDetailById",res.data)
     interfaceDetail.value=res.data.data
+    interfaceDetail.value.img = await uploadUtil.upload(interfaceDetail.value.img_url);
+    // interfaceDetail.value.img_url= await uploadUtil.upload(interfaceDetail.value.img_url)
   })
-
 })
+
+
+
+
+
 
 const handleCopyCodeSuccess=()=>{
   ElMessage.success("复制成功")

@@ -17,9 +17,6 @@
         <el-form-item label="地址:" :label-width="formLabelWidth">
           <el-input v-model="InterfaceDetails.url" autocomplete="off"/>
         </el-form-item>
-        <el-form-item label="图片地址:" :label-width="formLabelWidth">
-          <el-input v-model="InterfaceDetails.img_url" autocomplete="off"/>
-        </el-form-item>
         <el-form-item label="方法" :label-width="formLabelWidth">
           <el-select v-model="InterfaceDetails.method" placeholder="请选择">
             <el-option label="GET" value="GET"/>
@@ -32,8 +29,13 @@
             <el-option label="IMAGE" value="IMAGE"/>
           </el-select>
         </el-form-item>
-        <el-form-item label="示例值:" :label-width="formLabelWidth">
-          <el-input type="textarea" v-model="InterfaceDetails.example" autocomplete="off"/>
+        <el-form-item label="返回结果示例值:" :label-width="formLabelWidth">
+          <el-input v-if="InterfaceDetails.resp_type==='JSON'" type="textarea" v-model="InterfaceDetails.example" autocomplete="off"/>
+          <FileUpload v-if="InterfaceDetails.resp_type==='IMAGE'" :url="InterfaceDetails.example"  :getUrl="getExample"/>
+        </el-form-item>
+        <el-form-item label="接口封面:" :label-width="formLabelWidth">
+<!--          <el-input v-model="InterfaceDetails.img_url" autocomplete="off"/>-->
+          <FileUpload :url="InterfaceDetails.img_url" :getUrl="getUrl"/>
         </el-form-item>
       </el-form>
 
@@ -57,6 +59,7 @@ import {deepClone} from "@/js/ObjectClone";
 import store from "@/store/store";
 import {ElMessage} from "element-plus";
 import http from "@/js/http";
+import FileUpload from "@/components/FileCompoment/FileUpload.vue";
 
 const InterfaceDetails = computed(()=> store.state.InterfaceDetails)
 
@@ -75,9 +78,15 @@ const sumbit = () => {
       store.commit("showRequestParametersEditDialog",false)
     }
   })
-
 }
 
+const getUrl=(url)=>{
+  InterfaceDetails.value.img_url=url
+}
+
+const getExample=(example)=>{
+  InterfaceDetails.value.example=example
+}
 
 </script>
 

@@ -173,6 +173,9 @@ const addInterface=()=>{
   margin-bottom: 3vh;
   border-radius: 8px;
   font-size: 13px;
+  cursor: pointer;
+  font-weight: 600;
+  color: red;
 }
 .interfaceSearchBox {
   width: 100%;

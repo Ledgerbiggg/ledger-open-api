@@ -11,8 +11,8 @@
         </template>
       </el-table-column>
       <el-table-column align="center" prop="name" label="接口名称" width="160"/>
-      <el-table-column align="center" prop="status" label="接口状态" width="120"/>
-      <el-table-column align="center" prop="consume" label="接口消费" width="120"/>
+      <el-table-column align="center" prop="status" label="接口状态" width="100"/>
+      <el-table-column align="center" prop="consume" label="接口消费" width="100"/>
       <el-table-column
           align="center"
           prop="tag"
@@ -36,12 +36,12 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column align="center" sortable prop="description" label="描述" width="120"/>
+      <el-table-column align="center" sortable prop="description" label="描述" width="190"/>
       <el-table-column align="center" prop="url" label="url" width="190"/>
-      <el-table-column align="center" prop="call_count" label="请求次数" width="150"/>
+      <el-table-column align="center" prop="call_count" label="请求次数" width="100"/>
       <el-table-column
           align="center"
-          label="操作" width="170">
+          label="操作" min-width="150">
         <template #default="scope">
           <!-- 这里是自定义的 HTML 内容 -->
           <span class="btn">
