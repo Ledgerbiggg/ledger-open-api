@@ -1,5 +1,9 @@
 package com.ledger.api_interface;
 
+import com.alibaba.fastjson.JSON;
+import com.ledger.api_common.test.HotSou;
+import com.ledger.api_common.util.HttpUtil;
+import org.apache.http.protocol.HTTP;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -40,5 +44,16 @@ public class test {
             j = 0;
         }
         return 'Z';
+    }
+
+
+    @Test
+    void name1() {
+        HotSou hotSou = new HotSou();
+        hotSou.setList("csdn");
+        hotSou.setLang("zh-cn");
+        hotSou.setCache(true);
+        byte[] ledgerApiByteArr = HttpUtil.getLedgerApiByteArr(hotSou, null, true);
+        System.out.println(new String(ledgerApiByteArr));
     }
 }

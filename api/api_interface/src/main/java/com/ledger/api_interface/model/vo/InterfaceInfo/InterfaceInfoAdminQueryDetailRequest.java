@@ -23,6 +23,7 @@ public class InterfaceInfoAdminQueryDetailRequest {
     private Integer call_count;
     private String resp_type;
     private String example;
+    private Boolean need_certificate;
 
     private List<RequestParametersVo> requestParametersVos;
 

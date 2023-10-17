@@ -18,6 +18,7 @@ public class InterfaceInfoAdminSaveDetailRequest {
     private String resp_type;
     private int status;
     private String url;
+    private boolean need_certificate;
 
     private List<RequestParametersSaveRequest> requestParametersSaveRequests;
 

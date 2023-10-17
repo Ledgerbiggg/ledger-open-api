@@ -14,9 +14,21 @@
       <el-form-item label="描述" prop="description">
         <el-input v-model="interfaceAdd.description"/>
       </el-form-item>
-      <el-form-item label="消费">
-        <el-input-number v-model="interfaceAdd.consume" :min="1" :max="10"/>
-      </el-form-item>
+    <el-row>
+      <el-col :span="8">
+        <el-form-item label="消费">
+          <el-input-number v-model="interfaceAdd.consume" :min="1" :max="10"/>
+        </el-form-item>
+      </el-col>
+      <el-col :span="8">
+        <el-form-item label="是否伪造证书">
+          <el-select v-model="interfaceAdd.need_certificate" placeholder="请选择">
+            <el-option label="否" :value="0" />
+            <el-option label="是" :value="1" />
+          </el-select>
+        </el-form-item>
+      </el-col>
+    </el-row>
       <el-row>
         <el-col :span="8">
           <el-form-item label="状态">
@@ -75,7 +87,8 @@ const interfaceAdd = ref({
   url: '',
   img_url: '',
   resp_type: 'JSON',
-  example: ''
+  example: '',
+  need_certificate:0
 })
 
 

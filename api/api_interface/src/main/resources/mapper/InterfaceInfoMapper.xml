@@ -19,6 +19,7 @@
             <result property="resp_type" column="resp_type" jdbcType="VARCHAR"/>
             <result property="consume" column="consume" jdbcType="INTEGER"/>
             <result property="example" column="example" jdbcType="VARCHAR"/>
+            <result property="need_certificate" column="need_certificate" jdbcType="TINYINT"/>
     </resultMap>
 
     <sql id="Base_Column_List">
@@ -26,7 +27,7 @@
         url,request_header,response_header,
         status,is_delete,update_time,
         create_time,method,img_url,
-        call_count,resp_type,consume,example
+        call_count,resp_type,consume,example,need_certificate
     </sql>
     <insert id="addCount">
         UPDATE interface_info

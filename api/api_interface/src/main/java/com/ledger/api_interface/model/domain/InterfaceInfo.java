@@ -85,6 +85,8 @@ public class InterfaceInfo implements Serializable {
 
     private String example;
 
+    private Boolean need_certificate;
+
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 }

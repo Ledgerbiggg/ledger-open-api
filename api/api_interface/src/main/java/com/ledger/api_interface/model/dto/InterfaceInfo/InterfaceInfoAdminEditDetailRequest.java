@@ -17,5 +17,6 @@ public class InterfaceInfoAdminEditDetailRequest {
     private String img_url;
     private String resp_type;
     private String example;
+    private Boolean need_certificate;
 
 }

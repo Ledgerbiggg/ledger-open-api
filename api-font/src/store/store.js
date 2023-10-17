@@ -69,7 +69,8 @@ export default createStore({
             url: '',
             img_url: '',
             resp_type: 'JSON',
-            example: ''
+            example: '',
+            need_certificate:0
         },
         //添加请求参数
         requestParameters:[],

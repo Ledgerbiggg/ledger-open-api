@@ -136,7 +136,7 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
         interfaceInfoWithParams.setResponseParametersList(responseParametersList);
         BeanUtil.copyProperties(interfaceInfo, interfaceInfoWithParams);
 
-        interfaceInfoWithParams.setUrl(address+"/"+interfaceInfo.getId());
+        interfaceInfoWithParams.setUrl(address + "/" + interfaceInfo.getId());
         return Result.success(interfaceInfoWithParams);
     }
 
@@ -147,6 +147,7 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
         UserInfo userByUsername = userInfoService.getUserByUsername(username);
         InterfaceInfo interfaceInfo = interfaceInfoService.getById(interfaceInfoCallRequest.getInterfaceId());
         String url = interfaceInfo.getUrl();
+        Boolean needCertificate = interfaceInfo.getNeed_certificate();
         BigDecimal divide = userByUsername.getAccount().subtract(new BigDecimal(interfaceInfo.getConsume()));
         if (divide.compareTo(new BigDecimal(0)) < 0) {
             throw new KnowException("余额不足");
@@ -157,20 +158,20 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
         userInfoService.updateById(userByUsername);
         Object jsonObject = "";
         String method = interfaceInfoCallRequest.getMethod();
-         HashMap<String, Object> params = interfaceInfoCallRequest.getParams();
+        HashMap<String, Object> params = interfaceInfoCallRequest.getParams();
         String respType = interfaceInfoCallRequest.getResp_type();
         if ("POST".equalsIgnoreCase(method)) {
             if ("JSON".equalsIgnoreCase(respType)) {
-                jsonObject = HttpUtil.postJson(url, params, null);
+                jsonObject = HttpUtil.postJson(url, params, null, needCertificate);
             } else if ("IMAGE".equalsIgnoreCase(respType)) {
-                byte[] bytes = HttpUtil.getByteArr(url, params, null);
+                byte[] bytes = HttpUtil.getByteArr(url, params, null, needCertificate);
                 jsonObject = Base64.getEncoder().encodeToString(bytes);
             }
         } else if ("GET".equalsIgnoreCase(method)) {
             if ("JSON".equalsIgnoreCase(respType)) {
-                jsonObject = HttpUtil.getJson(url, params, null);
+                jsonObject = HttpUtil.getJson(url, params, null, needCertificate);
             } else if ("IMAGE".equalsIgnoreCase(respType)) {
-                byte[] bytes = HttpUtil.getByteArr(url, params, null);
+                byte[] bytes = HttpUtil.getByteArr(url, params, null, needCertificate);
                 jsonObject = FileUtil.byteToBase64(bytes);
             }
         } else {
@@ -220,13 +221,13 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
 
         LambdaQueryWrapper<RequestParameters> requestParametersLambdaQueryWrapper = new LambdaQueryWrapper<>();
 
-        requestParametersLambdaQueryWrapper.eq(RequestParameters::getApi_id,id);
+        requestParametersLambdaQueryWrapper.eq(RequestParameters::getApi_id, id);
 
         List<RequestParameters> requestParameters = requestParametersService.list(requestParametersLambdaQueryWrapper);
 
         LambdaQueryWrapper<ResponseParameters> responseParametersLambdaQueryWrapper = new LambdaQueryWrapper<>();
 
-        responseParametersLambdaQueryWrapper.eq(ResponseParameters::getApi_id,id);
+        responseParametersLambdaQueryWrapper.eq(ResponseParameters::getApi_id, id);
 
         List<ResponseParameters> responseParameters = responseParametersService.list(responseParametersLambdaQueryWrapper);
 
@@ -243,18 +244,19 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
     }
 
     @Override
-    public Result<Object> externalCall(InterfaceInfoSDKCallRequest interfaceInfoSDKCallRequest, HttpServletRequest request,String id) {
+    public Result<Object> externalCall(InterfaceInfoSDKCallRequest interfaceInfoSDKCallRequest, HttpServletRequest request, String id) {
         String accessKey = request.getHeader("AccessKey");
         String secretKey = request.getHeader("SecretKey");
         LambdaQueryWrapper<UserInfo> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(UserInfo::getAccessKey, accessKey);
         wrapper.eq(UserInfo::getSecretKey, secretKey);
         UserInfo userInfo = userInfoService.getOne(wrapper);
-        if(userInfo == null){
+        if (userInfo == null) {
             throw new KnowException("错误的AccessKey或者错误的SecretKey");
         }
         InterfaceInfo interfaceInfo = interfaceInfoService.getById(id);
         String url = interfaceInfo.getUrl();
+        Boolean needCertificate = interfaceInfo.getNeed_certificate();
         BigDecimal divide = userInfo.getAccount().subtract(new BigDecimal(interfaceInfo.getConsume()));
         if (divide.compareTo(new BigDecimal(0)) < 0) {
             throw new KnowException("余额不足");
@@ -269,20 +271,20 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
         String respType = interfaceInfoSDKCallRequest.getResp_type();
         if ("POST".equalsIgnoreCase(method)) {
             if ("JSON".equalsIgnoreCase(respType)) {
-                jsonObject = HttpUtil.postJson(url, params, null);
+                jsonObject = HttpUtil.postJson(url, params, null, needCertificate);
             } else if ("IMAGE".equalsIgnoreCase(respType)) {
-                byte[] bytes = HttpUtil.getByteArr(url, params, null);
+                byte[] bytes = HttpUtil.getByteArr(url, params, null, needCertificate);
                 jsonObject = Base64.getEncoder().encodeToString(bytes);
-            }else {
+            } else {
                 throw new KnowException("不正确的返回结果格式");
             }
         } else if ("GET".equalsIgnoreCase(method)) {
             if ("JSON".equalsIgnoreCase(respType)) {
-                jsonObject = HttpUtil.getJson(url, params, null);
+                jsonObject = HttpUtil.getJson(url, params, null, needCertificate);
             } else if ("IMAGE".equalsIgnoreCase(respType)) {
-                byte[] bytes = HttpUtil.getByteArr(url, params, null);
+                byte[] bytes = HttpUtil.getByteArr(url, params, null, needCertificate);
                 jsonObject = FileUtil.byteToBase64(bytes);
-            }else {
+            } else {
                 throw new KnowException("不正确的返回结果格式");
             }
         } else {
@@ -318,11 +320,11 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
     public Result<String> modifyInterfaceParameters(InterfaceInfoAdminEditDetailRequest interfaceInfoAdminEditDetailRequest) {
         InterfaceInfo interfaceInfo = BeanUtil.copyProperties(interfaceInfoAdminEditDetailRequest, InterfaceInfo.class);
 
-        String example="";
-        if(interfaceInfo.getResp_type().equals("JSON")){
+        String example = "";
+        if (interfaceInfo.getResp_type().equals("JSON")) {
             example = JSON.parse(interfaceInfoAdminEditDetailRequest.getExample()).toString();
         } else if (interfaceInfo.getResp_type().equals("IMAGE")) {
-            example=interfaceInfo.getExample();
+            example = interfaceInfo.getExample();
         }
         interfaceInfo.setExample(example);
         saveOrUpdate(interfaceInfo);
@@ -393,14 +395,14 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
     @Override
     public Result<String> getFileCheck() {
         String token =
-                JwtUtil.createTempJwt((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal(), null,secret);
+                JwtUtil.createTempJwt((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal(), null, secret);
         return Result.success(token);
     }
 
     @Override
     public void getFile(String fileName, String token, HttpServletResponse response) {
         boolean b = JwtUtil.validateJwt(token, secret);
-        if(!b){
+        if (!b) {
             throw new KnowException("token验证失败");
         }
         response.setContentType("image/jpeg");

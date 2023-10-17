@@ -20,6 +20,5 @@ public class TestController {
     @ApiOperation("测试") // 添加 API 操作说明
     public void test(HttpServletResponse httpServletResponse) {
 
-        HttpUtil.getAndSend("https://www.dmoe.cc/random.php", null, null, httpServletResponse, ContentTypeEnum.IMAGE_PNG);
     }
 }

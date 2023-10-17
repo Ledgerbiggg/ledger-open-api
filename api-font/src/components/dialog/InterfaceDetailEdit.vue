@@ -11,6 +11,12 @@
             <el-option label="是" :value=1 />
           </el-select>
         </el-form-item>
+        <el-form-item label="是否需要伪造证书" :label-width="formLabelWidth">
+          <el-select v-model="InterfaceDetails.need_certificate" placeholder="请选择">
+            <el-option label="否" :value=0 />
+            <el-option label="是" :value=1 />
+          </el-select>
+        </el-form-item>
         <el-form-item label="描述:" :label-width="formLabelWidth">
           <el-input v-model="InterfaceDetails.description" autocomplete="off"/>
         </el-form-item>
