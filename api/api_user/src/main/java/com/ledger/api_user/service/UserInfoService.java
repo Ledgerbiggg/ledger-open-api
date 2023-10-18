@@ -1,7 +1,7 @@
 package com.ledger.api_user.service;
 
+import com.ledger.api_common.model.domain.userInfo.UserInfo;
 import com.ledger.api_common.response.Result;
-import com.ledger.api_user.model.domain.UserInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ledger.api_user.model.dto.UserInfoLogin;
 import com.ledger.api_user.model.dto.UserInfoRegister;
@@ -21,6 +21,8 @@ public interface UserInfoService extends IService<UserInfo> {
 
     UserInfo getUserByUsername(String username);
 
+
+
     Result<String> register(UserInfoRegister user, HttpServletResponse response);
 
     Result<UploadVo> uploadAvatar(MultipartFile file);
@@ -33,5 +35,6 @@ public interface UserInfoService extends IService<UserInfo> {
     void getAvatar(String fileName, String token, HttpServletResponse response);
 
     Result<String> getAvatarCheck();
+
 
 }

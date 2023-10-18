@@ -3,6 +3,8 @@ package com.ledger.api_interface.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ledger.api_common.feign.userInfo.UserInfoService;
+import com.ledger.api_common.model.domain.userInfo.UserInfo;
 import com.ledger.api_common.model.query.PageQuery;
 import com.ledger.api_common.response.Result;
 import com.ledger.api_common.util.PageUtil;
@@ -10,17 +12,14 @@ import com.ledger.api_interface.model.domain.CallHistory;
 import com.ledger.api_interface.model.dto.callHistory.CallHistoryQueryRequest;
 import com.ledger.api_interface.service.CallHistoryService;
 import com.ledger.api_interface.mapper.CallHistoryMapper;
-import com.ledger.api_user.model.domain.UserInfo;
-import com.ledger.api_user.service.UserInfoService;
+//import com.ledger.api_user.service.UserInfoService;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.text.DateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.stream.Collectors;
 
 /**
  * @author 22866

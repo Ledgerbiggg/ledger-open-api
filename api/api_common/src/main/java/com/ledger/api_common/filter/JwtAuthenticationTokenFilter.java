@@ -1,11 +1,11 @@
-package com.ledger.api_user.filter;
+package com.ledger.api_common.filter;
 
 
-import com.ledger.api_user.model.domain.SecurityUser;
-import com.ledger.api_user.model.domain.UserInfo;
-import com.ledger.api_user.service.UserInfoService;
-import com.ledger.api_user.service.UserPermissionsService;
-import com.ledger.api_user.util.JwtUtil;
+import com.ledger.api_common.feign.userInfo.UserInfoService;
+import com.ledger.api_common.model.domain.userInfo.SecurityUser;
+import com.ledger.api_common.model.domain.userInfo.UserInfo;
+
+import com.ledger.api_common.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,8 +25,6 @@ import java.util.List;
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     @Resource
     private UserInfoService userInfoService;
-    @Resource
-    private UserPermissionsService userPermissionsService;
 
     @Value("${jwt.tokenHeader}")
     private String tokenHeader;
@@ -51,7 +49,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
                 String userNameFromToken = JwtUtil.getUserNameFromToken(token, secret);
                 if (userNameFromToken != null) {
                     UserInfo userByUsername = userInfoService.getUserByUsername(userNameFromToken);
-                    List<String> auth = userPermissionsService.getAuthByUserId(userByUsername.getId());
+                    List<String> auth = userInfoService.getAuthByUserId(userByUsername.getId());
                     SecurityUser securityUser = new SecurityUser(userByUsername, auth);
                     UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
                             new UsernamePasswordAuthenticationToken(securityUser, null, securityUser.getAuthorities());

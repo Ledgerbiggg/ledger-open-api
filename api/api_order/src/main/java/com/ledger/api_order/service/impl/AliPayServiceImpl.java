@@ -1,15 +1,13 @@
 package com.ledger.api_order.service.impl;
 
 import com.alipay.api.internal.util.AlipaySignature;
+import com.ledger.api_common.model.domain.userInfo.UserInfo;
 import com.ledger.api_order.config.AliPayConfig;
 import com.ledger.api_order.model.domain.AliPay;
 import com.ledger.api_order.model.domain.Orders;
 import com.ledger.api_order.service.AliPayService;
 import com.ledger.api_order.service.OrdersService;
-import com.ledger.api_user.model.domain.UserInfo;
 import com.ledger.api_user.service.UserInfoService;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 

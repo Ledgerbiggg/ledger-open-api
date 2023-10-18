@@ -1,4 +1,4 @@
-package com.ledger.api_user.handler;
+package com.ledger.api_common.handler;
 
 import com.alibaba.fastjson.JSON;
 import com.ledger.api_common.response.Result;

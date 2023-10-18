@@ -1,18 +1,18 @@
 package com.ledger.api_interface.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.StrUtil;
 
 import java.io.*;
 import java.util.Base64;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ledger.api_common.Exception.KnowException;
+import com.ledger.api_common.feign.userInfo.UserInfoService;
+import com.ledger.api_common.model.domain.userInfo.UserInfo;
 import com.ledger.api_common.model.query.PageQuery;
 import com.ledger.api_common.response.Result;
 import com.ledger.api_common.util.*;
@@ -36,12 +36,10 @@ import com.ledger.api_interface.service.CallHistoryService;
 import com.ledger.api_interface.service.InterfaceInfoService;
 import com.ledger.api_interface.service.RequestParametersService;
 import com.ledger.api_interface.service.ResponseParametersService;
-import com.ledger.api_user.model.domain.UserInfo;
 import com.ledger.api_user.model.vo.UploadVo;
-import com.ledger.api_user.service.UserInfoService;
-import com.ledger.api_user.util.JwtUtil;
+
+import com.ledger.api_common.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -50,7 +48,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletOutputStream;
-import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;

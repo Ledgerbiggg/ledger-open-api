@@ -1,18 +1,15 @@
-package com.ledger.api_user.config;
+package com.ledger.api_common.config;
 
-
-import com.ledger.api_user.filter.JwtAuthenticationTokenFilter;
-import com.ledger.api_user.filter.ValidateCodeFilter;
-import com.ledger.api_user.handler.AppAccessDeniedHandler;
+import com.ledger.api_common.filter.JwtAuthenticationTokenFilter;
+import com.ledger.api_common.filter.ValidateCodeFilter;
+import com.ledger.api_common.handler.AppAccessDeniedHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;

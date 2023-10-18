@@ -80,11 +80,7 @@
         <!--            <version>2.2.6.RELEASE</version>-->
         <!--        </dependency>-->
 
-        <!--openfeign依赖 Feign的注解定义接口，调用这个接口，就可以调用服务注册中心的服务-->
-        <!--        <dependency>-->
-        <!--            <groupId>org.springframework.cloud</groupId>-->
-        <!--            <artifactId>spring-cloud-starter-openfeign</artifactId>-->
-        <!--        </dependency>-->
+
 
         <!--openFeign使用时需要搭配loadbalancer负载均衡-->
         <dependency>

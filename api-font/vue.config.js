@@ -6,7 +6,7 @@ module.exports = defineConfig({
 
     proxy: {
       '/api': {
-        target: 'http://localhost',
+        target: 'http://localhost:12000',
         // target: 'http://ledger-code.buzz:9999',
         changeOrigin: true, // 允许跨域
         pathRewrite: {

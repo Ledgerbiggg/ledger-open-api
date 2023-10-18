@@ -1,11 +1,11 @@
-package com.ledger.api_user.model.domain;
+package com.ledger.api_common.model.domain.userInfo;
 
+import com.ledger.api_common.model.domain.userInfo.UserInfo;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;

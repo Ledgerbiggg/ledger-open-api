@@ -1,7 +1,7 @@
 package com.ledger.api_user.mapper;
 
-import com.ledger.api_user.model.domain.UserInfo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.ledger.api_common.model.domain.userInfo.UserInfo;
 
 /**
 * @author 22866

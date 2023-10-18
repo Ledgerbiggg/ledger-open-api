@@ -1,4 +1,4 @@
-package com.ledger.api_user.config;
+package com.ledger.api_common.config;
 
 import com.google.code.kaptcha.impl.DefaultKaptcha;
 import com.google.code.kaptcha.util.Config;

@@ -1,8 +1,7 @@
-package com.ledger.api_user.util;
+package com.ledger.api_common.util;
 
 
-import cn.hutool.log.Log;
-import com.ledger.api_user.model.domain.Permissions;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

@@ -1,15 +1,14 @@
 package com.ledger.api_user.service.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ledger.api_common.model.domain.userInfo.UserInfo;
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.IdUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ledger.api_common.Exception.KnowException;
 import com.ledger.api_common.response.Result;
 import com.ledger.api_common.util.FileUtil;
-import com.ledger.api_user.model.domain.SecurityUser;
-import com.ledger.api_user.model.domain.UserInfo;
+import com.ledger.api_common.model.domain.userInfo.SecurityUser;
 import com.ledger.api_user.model.domain.UserPermissions;
 import com.ledger.api_user.model.dto.UserInfoLogin;
 import com.ledger.api_user.model.dto.UserInfoRegister;
@@ -18,7 +17,7 @@ import com.ledger.api_user.model.vo.UserInfoVo;
 import com.ledger.api_user.service.UserInfoService;
 import com.ledger.api_user.mapper.UserInfoMapper;
 import com.ledger.api_user.service.UserPermissionsService;
-import com.ledger.api_user.util.JwtUtil;
+import com.ledger.api_common.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -29,7 +28,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletOutputStream;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -37,7 +35,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.StringJoiner;
 import java.util.UUID;
-import javax.imageio.ImageIO;
+
 /**
  * @author 22866
  * @description 针对表【user_info(存储用户信息)】的数据库操作Service实现
@@ -177,6 +175,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
                 JwtUtil.createTempJwt((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal(), null,secret);
         return Result.success(token);
     }
+
 
     @Override
     public void getAvatar(String fileName, String token, HttpServletResponse response) {

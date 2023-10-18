@@ -33,9 +33,6 @@ public class AliPayController {
     private AliPayService aliPayService;
 
 
-
-
-
     @GetMapping("/pay") // &subject=xxx&traceNo=xxx&totalAmount=xxx
     public void pay(AliPay aliPay, HttpServletResponse httpResponse)  {
         aliPayService.pay(aliPay, httpResponse);
