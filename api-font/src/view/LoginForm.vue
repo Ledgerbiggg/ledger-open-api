@@ -30,7 +30,7 @@ const submit = () => {
         console.log("/login", res);
         if (res.data.code === 200) {
           ElMessage.success("登录成功")
-          router.push("/main");
+          router.push("/welcome");
         }
       })
       .catch(rea => {

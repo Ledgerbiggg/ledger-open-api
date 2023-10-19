@@ -3,6 +3,7 @@
 import axios from 'axios'
 // 使用element-ui Message做消息提醒
 import { ElMessage } from 'element-plus';
+import router from "@/router/router";
 // import router from "@/js/router";
 
 //1. 创建新的axios实例，
@@ -51,9 +52,10 @@ service.interceptors.response.use(response => {
     if (Role) {
         window.localStorage.setItem('Role', Role);
     }
-    if (response.data.code === 403 ) {
+    if (response.data.code === 403) {
         window.localStorage.removeItem("unexpired")
         ElMessage.error(response.data.msg)
+        router.push("/login")
         // return Promise.reject(response);
     }
     if(response.data.code === 401 || response.data.code === 500){

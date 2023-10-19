@@ -96,6 +96,7 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
     //如果用户访问的登录页，直接放行
     if (to.path === '/login' || to.path === '/register') return next()
+    if (to.path === '/') return next('/welcome')
     // 从sessionStorage中获取到保存的token值
     const tokenStr = window.localStorage.getItem('token')
     let unexpired = window.localStorage.getItem("unexpired");

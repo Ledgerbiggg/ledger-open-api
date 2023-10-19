@@ -25,7 +25,7 @@
       </div>
       <div class="avatar" @click="goRouter('/account/center')">
         <el-avatar :size="50"
-                   src="https://image-bed-for-ledgerhhh.oss-cn-beijing.aliyuncs.com/image/f898326080e5beae1f061950b308fc9.jpg"/>
+                   :src="imageUrl"/>
       </div>
     </div>
     <div class="content-box">
@@ -39,6 +39,8 @@
 import router from "@/router/router";
 import {onMounted, ref} from 'vue';
 import {useStore} from "vuex";
+import http from "@/js/http";
+import uploadUtil from "@/js/uploadUtil";
 
 const role = ref("")
 
@@ -76,12 +78,24 @@ const optionList = ref([
 ])
 let store = useStore();
 const docLink = store.state.linkList.docLink
+const imageUrl=ref("")
 
 onMounted(() => {
+  initRole()
+  getUserIcon()
+})
+const getUserIcon=()=>{
+  http.get("/user/getUserIcon").then(async res => {
+    if (res.data.code === 200) {
+      imageUrl.value = await uploadUtil.upload(res.data.data);
+    }
+  })
+}
+const initRole=()=>{
   let item = window.localStorage.getItem('Role');
   store.commit('setRole', item);
   role.value = item
-})
+}
 
 
 
