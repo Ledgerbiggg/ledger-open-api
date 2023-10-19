@@ -3,6 +3,7 @@ package com.ledger.api_interface.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ledger.api_common.model.query.PageQuery;
+import com.ledger.api_common.model.vo.UploadVo;
 import com.ledger.api_common.response.Result;
 import com.ledger.api_interface.model.dto.InterfaceInfo.*;
 import com.ledger.api_interface.model.dto.RequestParameters.RequestParametersRequest;
@@ -13,7 +14,6 @@ import com.ledger.api_interface.model.vo.InterfaceInfo.InterfaceInfoQueryListReq
 import com.ledger.api_interface.model.vo.InterfaceInfo.InterfaceInfoWithParams;
 import com.ledger.api_interface.model.vo.RequestParameters.RequestParametersVo;
 import com.ledger.api_interface.service.InterfaceInfoService;
-import com.ledger.api_user.model.vo.UploadVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.security.access.prepost.PreAuthorize;

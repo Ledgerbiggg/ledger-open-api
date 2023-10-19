@@ -19,10 +19,10 @@
         </dependency>
         <dependency>
             <groupId>com.ledger</groupId>
-            <artifactId>api_user</artifactId>
+            <artifactId>api_filterConfig</artifactId>
             <version>0.0.1-SNAPSHOT</version>
-            <scope>compile</scope>
         </dependency>
+
         <!--        openfeign依赖 Feign的注解定义接口，调用这个接口，就可以调用服务注册中心的服务-->
         <dependency>
             <groupId>org.springframework.cloud</groupId>

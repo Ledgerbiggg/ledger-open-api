@@ -1,14 +1,14 @@
 package com.ledger.api_user.service.impl;
 
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.ledger.api_common.model.domain.userInfo.UserInfo;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.IdUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ledger.api_common.Exception.KnowException;
 import com.ledger.api_common.response.Result;
 import com.ledger.api_common.util.FileUtil;
-import com.ledger.api_common.model.domain.userInfo.SecurityUser;
+import com.ledger.api_filterConfig.model.domain.userInfo.SecurityUser;
+import com.ledger.api_filterConfig.model.domain.userInfo.UserInfo;
 import com.ledger.api_user.model.domain.UserPermissions;
 import com.ledger.api_user.model.dto.UserInfoLogin;
 import com.ledger.api_user.model.dto.UserInfoRegister;
@@ -174,6 +174,17 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
         String token =
                 JwtUtil.createTempJwt((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal(), null,secret);
         return Result.success(token);
+    }
+
+    @Override
+    public Result<String> getUserIcon() {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        String username = userDetails.getUsername();
+
+        UserInfo userByUsername = getUserByUsername(username);
+
+        return Result.success(userByUsername.getAvatar());
     }
 
 

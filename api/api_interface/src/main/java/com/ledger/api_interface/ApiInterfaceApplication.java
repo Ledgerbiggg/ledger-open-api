@@ -13,21 +13,14 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @SpringBootApplication
 @EnableSwagger2
 @MapperScan("com.ledger.api_interface.mapper")
-@ComponentScan({"com.ledger.api_interface","com.ledger.api_common","com.ledger.api_user"})
-@EnableFeignClients(basePackages = "com.ledger.api_common.feign")//方法2
+@ComponentScan({"com.ledger.api_interface","com.ledger.api_common","com.ledger.api_filterConfig"})
+@EnableFeignClients(basePackages = "com.ledger.api_filterConfig.feign")//方法2
 public class ApiInterfaceApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(ApiInterfaceApplication.class, args);
     }
 
-
-    @Bean
-    @LoadBalanced
-    public RestTemplate restTemplate() {
-        //发送请求的模板
-        return new RestTemplate();
-    }
 
 }
 

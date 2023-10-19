@@ -20,9 +20,15 @@
             <artifactId>api_common</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+
         <dependency>
             <groupId>com.ledger</groupId>
-            <artifactId>api_user</artifactId>
+            <artifactId>api_filterConfig</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.ledger</groupId>
+            <artifactId>api_filterConfig</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>

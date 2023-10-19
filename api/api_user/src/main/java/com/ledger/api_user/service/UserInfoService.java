@@ -1,8 +1,8 @@
 package com.ledger.api_user.service;
 
-import com.ledger.api_common.model.domain.userInfo.UserInfo;
-import com.ledger.api_common.response.Result;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.ledger.api_common.response.Result;
+import com.ledger.api_filterConfig.model.domain.userInfo.UserInfo;
 import com.ledger.api_user.model.dto.UserInfoLogin;
 import com.ledger.api_user.model.dto.UserInfoRegister;
 import com.ledger.api_user.model.vo.UploadVo;
@@ -36,5 +36,7 @@ public interface UserInfoService extends IService<UserInfo> {
 
     Result<String> getAvatarCheck();
 
+
+    Result<String> getUserIcon();
 
 }

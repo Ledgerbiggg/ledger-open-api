@@ -1,8 +1,9 @@
 package com.ledger.api_user.controller;
 
+
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.ledger.api_common.model.domain.userInfo.UserInfo;
 import com.ledger.api_common.response.Result;
+import com.ledger.api_filterConfig.model.domain.userInfo.UserInfo;
 import com.ledger.api_user.model.dto.UserInfoLogin;
 import com.ledger.api_user.model.dto.UserInfoRegister;
 import com.ledger.api_user.model.vo.UploadVo;
@@ -54,6 +55,14 @@ public class UserInfoController {
         return userInfoService.uploadAvatar(file);
     }
 
+
+    @GetMapping("/getUserIcon")
+    @ApiOperation("获取头像")
+    public Result<String> getUserIcon() {
+        return userInfoService.getUserIcon();
+    }
+
+
 //    @GetMapping("/getAvatarCheck")
 //    @ApiOperation("校验身份")
 //    public Result<String> getAvatarCheck() {
@@ -66,6 +75,10 @@ public class UserInfoController {
 //    public void getAvatar(String fileName,String token,HttpServletResponse response) {
 //        userInfoService.getAvatar(fileName,token,response);
 //    }
+
+
+
+
 
     @GetMapping("/feign/getUserByUsername")
     @ApiOperation("根据用户名获取用户")
@@ -89,6 +102,13 @@ public class UserInfoController {
     @ApiOperation("根据用户id获取权限")
     public List<String> getAuthByUserId(String userId) {
         return userPermissionsService.getAuthByUserId(userId);
+    }
+
+
+    @GetMapping("/feign/getById")
+    @ApiOperation("根据用户id获取用户")
+    public UserInfo getById(String userId) {
+        return userInfoService.getById(userId);
     }
 
 

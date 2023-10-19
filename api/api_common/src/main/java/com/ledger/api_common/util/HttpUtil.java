@@ -224,10 +224,10 @@ public class HttpUtil {
                 field.setAccessible(true);
                 try {
                     Object o = field.get(T);
-                    if (o instanceof String || o instanceof Integer || o instanceof Long || o instanceof Boolean || o instanceof Float || o instanceof Double) {
+                    if (o instanceof String || o instanceof Integer || o instanceof Long || o instanceof Boolean || o instanceof Float || o instanceof Double || o==null) {
                         params.put(field.getName(), o);
                     } else {
-                        throw new LedgerException("请将注解@ledgerApi加上去,并提供相应的url");
+                        throw new LedgerException("不合法的参数类型");
                     }
                 } catch (IllegalAccessException e) {
                     throw new LedgerException("获取注解失败,请检查是否正确注解了@ledgerApi");
