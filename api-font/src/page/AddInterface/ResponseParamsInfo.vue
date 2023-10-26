@@ -117,8 +117,6 @@ const submit = () => {
       store.commit("setResponseParameters", [])
       store.commit("setInterfaceAdd", {})
       router.push("/admin/interfaceManager")
-    }else {
-      ElMessage.error("提交失败")
     }
   })
 

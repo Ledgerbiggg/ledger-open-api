@@ -95,19 +95,14 @@ const router = createRouter({
 // 为路由对象，添加beforeEach导航守卫
 router.beforeEach((to, from, next) => {
     //如果用户访问的登录页，直接放行
-    if (to.path === '/login' || to.path === '/register') return next()
+    if (to.path === '/login' || to.path === '/register' ||  to.path === '/logout') return next()
     if (to.path === '/') return next('/welcome')
     // 从sessionStorage中获取到保存的token值
     const tokenStr = window.localStorage.getItem('token')
-    let unexpired = window.localStorage.getItem("unexpired");
     // 有token，而且未过期
-    if (tokenStr && unexpired) return next()
+    if (tokenStr) return next()
     if (tokenStr == null) {
         ElMessage.error('请先登录')
-    } else {
-        if (!unexpired) {
-            ElMessage.error('身份认证过期')
-        }
     }
     next('/login')
 })

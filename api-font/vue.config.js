@@ -3,7 +3,6 @@ module.exports = defineConfig({
   transpileDependencies: true,
 
   devServer: {
-
     proxy: {
       '/api': {
         target: 'http://localhost:12000',
@@ -16,7 +15,12 @@ module.exports = defineConfig({
       }
     }
   },
-
+  //生产环境去除控制台console.log的打印
+  configureWebpack: (config) => {
+    if (process.env.NODE_ENV === 'production') {
+      config.optimization.minimizer[0].options.terserOptions.compress.drop_console = true
+    }
+  },
   css: {
     loaderOptions: {
       less: {
@@ -26,7 +30,6 @@ module.exports = defineConfig({
       },
     },
   },
-
   pluginOptions: {
     'style-resources-loader': {
       preProcessor: 'less',

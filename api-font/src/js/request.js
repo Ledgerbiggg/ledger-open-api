@@ -3,16 +3,12 @@
 import axios from 'axios'
 // 使用element-ui Message做消息提醒
 import { ElMessage } from 'element-plus';
-import router from "@/router/router";
-// import router from "@/js/router";
+
+import {useRouter} from 'vue-router'
 
 //1. 创建新的axios实例，
 const service = axios.create({
-    // baseURL: "http://localhost:8080/api",
-    // baseURL: "http://ledgerapi.top/api/",
     baseURL: process.env.VUE_APP_API_BASE_URL,
-    // baseURL: "http://ledgerhhh-ai.top:8080",
-    // 超时时间 单位是ms，这里设置了3s的超时时间
     timeout: 9 * 10000,
 })
 // 2.请求拦截器
@@ -44,23 +40,20 @@ service.interceptors.response.use(response => {
     //接收到响应数据并成功后的一些共有的处理，关闭loading等
     let token = response.headers.get('Authorization');
     let Role = response.headers.get('Role');
+    const router = useRouter()
     console.log("token",token)
     if (token) {
         window.localStorage.setItem('token', token);
-        window.localStorage.setItem('unexpired', 'ledger');
     }
     if (Role) {
         window.localStorage.setItem('Role', Role);
     }
     if (response.data.code === 403) {
-        window.localStorage.removeItem("unexpired")
         ElMessage.error(response.data.msg)
-        router.push("/login")
-        // return Promise.reject(response);
+        router.push("/login").catch(e => { console.log(e) })
     }
     if(response.data.code === 401 || response.data.code === 500){
         ElMessage.error(response.data.data)
-        // return Promise.reject(response);
     }
     return response
 }, error => {

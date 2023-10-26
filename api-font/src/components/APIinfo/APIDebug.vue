@@ -116,8 +116,6 @@ const call = () => {
       }else if(props.resp_type==="IMAGE"){
         json.value="data:image/png;base64,"+res.data.data
       }
-    } else {
-      ElMessage.warning(res.data.data)
     }
   })
 }
