@@ -3,6 +3,6 @@ sys:
   profile: /home/data/uploadPath
 
 
-address: http:ledgerapi.top
+address: http://ledgerapi.top/api/interfaceInfo
 
 

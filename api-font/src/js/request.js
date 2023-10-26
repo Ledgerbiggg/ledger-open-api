@@ -8,9 +8,9 @@ import router from "@/router/router";
 
 //1. 创建新的axios实例，
 const service = axios.create({
-    baseURL: "http://localhost:8080/api",
-    // baseURL: "http://107.172.206.42/api/12000",
-    // baseURL: "http://ledgerhhh-ai.top:8080",
+    // baseURL: "http://localhost:8080/api",
+    // baseURL: "http://ledgerapi.top/api/",
+    baseURL: "http://60.204.241.30/api",
     // baseURL: "http://ledgerhhh-ai.top:8080",
     // 超时时间 单位是ms，这里设置了3s的超时时间
     timeout: 9 * 10000,

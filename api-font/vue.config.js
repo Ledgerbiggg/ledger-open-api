@@ -8,6 +8,7 @@ module.exports = defineConfig({
       '/api': {
         target: 'http://localhost:12000',
         // target: 'http://ledger-code.buzz:9999',
+        // target: 'http://ledgerapi.top:12000',
         changeOrigin: true, // 允许跨域
         pathRewrite: {
           // '^/api': '/'

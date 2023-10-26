@@ -25,11 +25,7 @@
             <groupId>com.ledger</groupId>
             <artifactId>api_filterConfig</artifactId>
             <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>com.ledger</groupId>
-            <artifactId>api_filterConfig</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.alipay.sdk</groupId>

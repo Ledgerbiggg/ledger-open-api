@@ -40,6 +40,8 @@ public class ValidateCodeFilter extends OncePerRequestFilter {
         //验证码拿取一次就移除
         session.removeAttribute("code");
         String code1 = request.getParameter("code");
+        log.info("正确的验证码是:{}",code);
+        log.info("输入的验证码是:{}",code1);
         session.removeAttribute("code_err");
         if (code1 == null || code == null) {
             session.setAttribute("code_err", "验证码为空");
