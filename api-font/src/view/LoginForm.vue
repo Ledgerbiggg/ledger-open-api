@@ -1,51 +1,3 @@
-<script setup>
-import http from "@/js/http";
-import router from "@/router/router";
-import {ref} from 'vue';
-import { onMounted } from 'vue';
-import { useStore } from 'vuex';
-import {ElMessage} from "element-plus";
-
-
-const user = ref({
-  username: "",
-  password: "",
-  captcha: ""
-});
-
-const store = useStore();
-const captchaSrc = ref('/api/user/captcha'); // 设置图片的初始 src
-
-onMounted(() => {
-  user.value.username= store.state.userInfo.username;
-  user.value.password= store.state.userInfo.password;
-})
-const getCaptcha = () => {
-  captchaSrc.value = '/api/user/captcha?' + Math.random(); // 使用 ref 引用来修改图片元素
-};
-
-const submit = () => {
-  http.post(`/user/login?code=${user.value.captcha}`, user.value)
-      .then(res => {
-        console.log("/login", res);
-        if (res.data.code === 200) {
-          ElMessage.success("登录成功")
-          router.push("/welcome");
-        }
-      })
-      .catch(rea => {
-        console.error("rea.data", rea.data);
-        getCaptcha();
-      });
-};
-
-const goRegister = () => {
-  console.log("goRegister");
-  router.push("/register");
-}
-
-
-</script>
 <template>
   <div class="body">
     <div class="loginBox">
@@ -60,7 +12,7 @@ const goRegister = () => {
           <label for="">密码</label>
         </div>
         <div class="item">
-          <input type="text" required v-model="user.captcha">
+          <input type="text" required v-model="user.captcha" @keydown.enter="submit">
           <label for="">验证码</label>
         </div>
         <img class="captcha" :src="captchaSrc" @click="getCaptcha()" ref="captcha">
@@ -79,7 +31,54 @@ const goRegister = () => {
     </div>
   </div>
 </template>
+<script setup>
+  import http from "@/js/http";
+  import router from "@/router/router";
+  import {ref} from 'vue';
+  import { onMounted } from 'vue';
+  import { useStore } from 'vuex';
+  import {ElMessage} from "element-plus";
 
+
+  const user = ref({
+    username: "",
+    password: "",
+    captcha: ""
+  });
+
+  const store = useStore();
+  const captchaSrc = ref('/api/user/captcha'); // 设置图片的初始 src
+
+  onMounted(() => {
+    user.value.username= store.state.userInfo.username;
+    user.value.password= store.state.userInfo.password;
+  })
+  const getCaptcha = () => {
+    captchaSrc.value = '/api/user/captcha?' + Math.random(); // 使用 ref 引用来修改图片元素
+  };
+
+  const submit = () => {
+    http.post(`/user/login?code=${user.value.captcha}`, user.value)
+            .then(res => {
+              console.log("/login", res);
+              if (res.data.code === 200) {
+                ElMessage.success("登录成功")
+                router.push("/welcome");
+              }
+            })
+            .catch(rea => {
+              console.error("rea.data", rea.data);
+              getCaptcha();
+            });
+  };
+
+  const goRegister = () => {
+    console.log("goRegister");
+    router.push("/register");
+  }
+
+
+</script>
 
 <style scoped>
 .goRegister{

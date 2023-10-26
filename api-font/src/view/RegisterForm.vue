@@ -1,42 +1,3 @@
-<script setup>
-import http from "@/js/http";
-import router from "@/router/router";
-import {ref} from 'vue';
-import {ElMessage} from 'element-plus';
-import { useStore } from 'vuex';
-
-const store = useStore();
-
-const user = ref({
-  username: "",
-  password: "",
-  password2: ""
-});
-
-const register = () => {
-  if (user.value.password !== user.value.password2) {
-    ElMessage.error("两次密码不一致");
-    return;
-  }
-  http.post(`/user/register`, user.value)
-      .then(res => {
-        console.log("/login", res);
-        if (res.data.code === 200) {
-          store.commit('updateUserInfo', {username: user.value.username, password: user.value.password})
-          ElMessage.success("注册成功")
-          router.push("/login");
-        }
-      })
-      .catch(rea => {
-        console.error("rea.data", rea.data);
-      });
-};
-const goLogin = () => {
-  console.log("goLogin");
-  router.push("/login");
-}
-</script>
-
 <template>
   <div class="body">
     <div class="loginBox">
@@ -47,11 +8,11 @@ const goLogin = () => {
           <label for="">用户名</label>
         </div>
         <div class="item">
-          <input type="password" required v-model="user.password">
+          <input type="password" required v-model="user.password" >
           <label for="">密码</label>
         </div>
         <div class="item">
-          <input type="password" required v-model="user.password2">
+          <input type="password" required v-model="user.password2" @keydown.enter="register()">
           <label for="">确认密码</label>
         </div>
         <button class="btn" @click="register()">注册
@@ -69,6 +30,45 @@ const goLogin = () => {
     </div>
   </div>
 </template>
+
+<script setup>
+  import http from "@/js/http";
+  import router from "@/router/router";
+  import {ref} from 'vue';
+  import {ElMessage} from 'element-plus';
+  import { useStore } from 'vuex';
+
+  const store = useStore();
+
+  const user = ref({
+    username: "",
+    password: "",
+    password2: ""
+  });
+
+  const register = () => {
+    if (user.value.password !== user.value.password2) {
+      ElMessage.error("两次密码不一致");
+      return;
+    }
+    http.post(`/user/register`, user.value)
+            .then(res => {
+              console.log("/login", res);
+              if (res.data.code === 200) {
+                store.commit('updateUserInfo', {username: user.value.username, password: user.value.password})
+                ElMessage.success("注册成功")
+                router.push("/login");
+              }
+            })
+            .catch(rea => {
+              console.error("rea.data", rea.data);
+            });
+  };
+  const goLogin = () => {
+    console.log("goLogin");
+    router.push("/login");
+  }
+</script>
 
 <style scoped>
 .goRegister {
@@ -167,7 +167,7 @@ h2 {
 .item input:focus + label,
 .item input:valid + label {
   top: 0px;
-  font-size: 2px;
+  font-size: 4px;
 }
 
 .item label {
