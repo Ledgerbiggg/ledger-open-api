@@ -40,11 +40,16 @@
         <jaxb-api.version>2.3.1</jaxb-api.version>
         <validation-api.version>2.0.1.Final</validation-api.version>
         <jakarta.validation-api.version>3.0.0</jakarta.validation-api.version>
-
-
+        <HikariCP.version>4.0.3</HikariCP.version>
     </properties>
 
     <dependencies>
+
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <version>${HikariCP.version}</version> <!-- 替换成你需要的版本 -->
+        </dependency>
 
         <!--这有可能是因为SpringBoot项目结合jwt进行登录时出现的问题，因为jdk版本太高导致的。-->
         <dependency>
@@ -53,7 +58,6 @@
             <version>${jaxb-api.version}</version>
         </dependency>
         <!--第一种方式导入校验依赖-->
-
         <dependency>
             <groupId>javax.validation</groupId>
             <artifactId>validation-api</artifactId>
@@ -82,13 +86,11 @@
         <!--        </dependency>-->
 
 
-
         <!--openFeign使用时需要搭配loadbalancer负载均衡-->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-loadbalancer</artifactId>
         </dependency>
-
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt</artifactId>
@@ -187,5 +189,32 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <!-- 开发版本 -->
+            <id>dev</id>
+            <properties>
+                <profiles.active>dev</profiles.active>
+            </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+        <profile>
+            <!-- 测试版本 -->
+            <id>test</id>
+            <properties>
+                <profiles.active>test</profiles.active>
+            </properties>
+        </profile>
+        <profile>
+            <!-- 发布版本 -->
+            <id>prod</id>
+            <properties>
+                <profiles.active>prod</profiles.active>
+            </properties>
+        </profile>
+    </profiles>
 
 </project>

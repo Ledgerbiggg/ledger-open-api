@@ -1,3 +1,18 @@
+# 开发环境
+
+spring:
+  cloud:
+    nacos:
+      discovery:
+        namespace: 36d3a2be-c57e-4132-9a86-ec0ae40fd15e
+
+
+mybatis-plus:
+  configuration:
+    # 配置 MyBatis-Plus 的日志实现为 org.apache.ibatis.logging.stdout.StdOutImpl
+    log-impl: org.apache.ibatis.logging.nologging.NoLoggingImpl
+
 sys:
   # 文件路径 示例（ Windows配置D:/attach/data/uploadPath，Linux配置 /home/data/uploadPath）
-  profile: C:/attach/data/uploadPath
+  profile: C:\D\image\
+

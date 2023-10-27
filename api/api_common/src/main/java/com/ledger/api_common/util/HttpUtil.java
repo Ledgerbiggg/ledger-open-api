@@ -1,6 +1,7 @@
 package com.ledger.api_common.util;
 
 import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson.JSONException;
 import com.ledger.api_common.Exception.LedgerException;
 import com.ledger.api_common.annotation.ledgerApi;
 import com.ledger.api_common.enums.Method;
@@ -196,12 +197,13 @@ public class HttpUtil {
     public static <T> JSON getLedgerApiJson(T T, HashMap<String, String> reqHeaderMap, boolean isNeedCertificate) {
         return JSON.parseObject(getLedgerApiData(T, reqHeaderMap, String.class, isNeedCertificate), JSON.class);
     }
+
     public static <T> byte[] getLedgerApiByteArr(T T, HashMap<String, String> reqHeaderMap, boolean isNeedCertificate) {
         return getLedgerApiData(T, reqHeaderMap, byte[].class, isNeedCertificate);
     }
 
 
-    public static <T,K> K getLedgerApiData(T T, HashMap<String, String> reqHeaderMap,Class<K> K, boolean isNeedCertificate) {
+    public static <T, K> K getLedgerApiData(T T, HashMap<String, String> reqHeaderMap, Class<K> K, boolean isNeedCertificate) {
         Class<?> clazz = T.getClass();
         boolean hasAnnotation = clazz.isAnnotationPresent(ledgerApi.class);
         if (hasAnnotation) {
@@ -224,7 +226,7 @@ public class HttpUtil {
                 field.setAccessible(true);
                 try {
                     Object o = field.get(T);
-                    if (o instanceof String || o instanceof Integer || o instanceof Long || o instanceof Boolean || o instanceof Float || o instanceof Double || o==null) {
+                    if (o instanceof String || o instanceof Integer || o instanceof Long || o instanceof Boolean || o instanceof Float || o instanceof Double || o == null) {
                         params.put(field.getName(), o);
                     } else {
                         throw new LedgerException("不合法的参数类型");
@@ -243,10 +245,6 @@ public class HttpUtil {
         }
         return null;
     }
-
-
-
-
 
 
     /**

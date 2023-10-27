@@ -8,8 +8,13 @@ spring:
     password: biaoge666  # MySQL数据库密码
     # 连接池配置
     hikari:
+      minimum-idle: 10
       maximum-pool-size: 10
-      idle-timeout: 30000
+      connection-timeout: 30000
+      max-lifetime: 1800000
+      idle-timeout: 600000
+      auto-commit: true
+
 
   application:
     # 服务名称
@@ -19,10 +24,9 @@ spring:
       discovery:
         # nacos注册中心地址
         server-addr: 106.54.9.19:8848
-        namespace: 81ae9a71-0a21-4992-9be9-7b145c5fa604
 
   profiles:
-    active: prod
+    active: @profiles.active@
 
 
 server:
@@ -30,8 +34,6 @@ server:
 
 mybatis-plus:
   configuration:
-    # 配置 MyBatis-Plus 的日志实现为 org.apache.ibatis.logging.stdout.StdOutImpl
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     map-underscore-to-camel-case: false
   # 指定 MyBatis 的类型别名包，用于自动注册别名
   type-aliases-package: com.ledger.api_user.model.domain

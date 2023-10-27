@@ -6,6 +6,13 @@ spring:
     url: jdbc:mysql://60.204.241.30:3306/open-api?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC # MySQL数据库连接URL，根据实际情况修改主机名和端口号
     username: root  # MySQL数据库用户名
     password: biaoge666  # MySQL数据库密码
+    hikari:
+      minimum-idle: 10
+      maximum-pool-size: 10
+      connection-timeout: 30000
+      max-lifetime: 1800000
+      idle-timeout: 600000
+      auto-commit: true
   application:
     # 服务名称
     name: api-interfaceInfo
@@ -14,20 +21,14 @@ spring:
       discovery:
         # nacos注册中心地址
         server-addr: 106.54.9.19:8848
-        namespace: 81ae9a71-0a21-4992-9be9-7b145c5fa604
   profiles:
-    active: prod
+    active: @profiles.active@
 
   servlet:
     multipart:
       max-file-size: 10MB
       max-request-size: 10MB
-#    hikari:
-#      maximum-pool-size: 20  # 连接池最大连接数
-#      minimum-idle: 5  # 连接池最小空闲连接数
-#      connection-timeout: 30000  # 连接超时时间，30秒
-#      idle-timeout: 600000  # 空闲连接超时时间，10分钟
-#      max-lifetime: 1800000  # 连接最大生存时间，30分钟
+
 
 #redis:
 #  host: localhost  # Redis 服务器主机名
@@ -41,7 +42,6 @@ server:
 mybatis-plus:
   configuration:
     # 配置 MyBatis-Plus 的日志实现为 org.apache.ibatis.logging.stdout.StdOutImpl
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     map-underscore-to-camel-case: false
     # 指定 MyBatis 的类型别名包，用于自动注册别名
   type-aliases-package: com.ledger.api_interface.model.domain

@@ -7,6 +7,7 @@ import java.io.*;
 import java.util.Base64;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONException;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -159,14 +160,22 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
         String respType = interfaceInfoCallRequest.getResp_type();
         if ("POST".equalsIgnoreCase(method)) {
             if ("JSON".equalsIgnoreCase(respType)) {
-                jsonObject = HttpUtil.postJson(url, params, null, needCertificate);
+                try {
+                    jsonObject = HttpUtil.postJson(url, params, null, needCertificate);
+                } catch (JSONException e) {
+                    jsonObject = HttpUtil.post(url, params, null, needCertificate);
+                }
             } else if ("IMAGE".equalsIgnoreCase(respType)) {
                 byte[] bytes = HttpUtil.getByteArr(url, params, null, needCertificate);
                 jsonObject = Base64.getEncoder().encodeToString(bytes);
             }
         } else if ("GET".equalsIgnoreCase(method)) {
             if ("JSON".equalsIgnoreCase(respType)) {
-                jsonObject = HttpUtil.getJson(url, params, null, needCertificate);
+                try {
+                    jsonObject = HttpUtil.getJson(url, params, null, needCertificate);
+                } catch (JSONException e) {
+                    jsonObject = HttpUtil.post(url, params, null, needCertificate);
+                }
             } else if ("IMAGE".equalsIgnoreCase(respType)) {
                 byte[] bytes = HttpUtil.getByteArr(url, params, null, needCertificate);
                 jsonObject = FileUtil.byteToBase64(bytes);
