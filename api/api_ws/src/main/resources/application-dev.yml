@@ -1,0 +1,14 @@
+# 开发环境
+
+spring:
+  cloud:
+    nacos:
+      discovery:
+        namespace: 81ae9a71-0a21-4992-9be9-7b145c5fa604
+
+
+mybatis-plus:
+  configuration:
+    # 配置 MyBatis-Plus 的日志实现为 org.apache.ibatis.logging.stdout.StdOutImpl
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
