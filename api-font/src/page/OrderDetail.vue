@@ -87,7 +87,10 @@ const buy = () => {
   showDialog.value = true;
   const host = window.location.hostname;
   const protocol = window.location.protocol;
-  const url = `${protocol}//${host}/api/order/pay?subject=${subject.value}&totalAmount=${totalAmount.value}&traceNo=${traceNo.value}`;
+  const port = window.location.port; // 获取端口号
+  console.log("protocol", protocol)
+  console.log("host", host)
+  const url = `${protocol}//${host}:${port}/api/order/pay?subject=${subject.value}&totalAmount=${totalAmount.value}&traceNo=${traceNo.value}`;
   window.open(url, '_blank');
 }
 

@@ -3,11 +3,11 @@ module.exports = defineConfig({
   transpileDependencies: true,
 
   devServer: {
+    // 不会影响ws服务
     proxy: {
       '/api': {
+        ws: false,
         target: 'http://localhost:12000',
-        // target: 'http://ledger-code.buzz:9999',
-        // target: 'http://ledgerapi.top:12000',
         changeOrigin: true, // 允许跨域
         pathRewrite: {
           // '^/api': '/'

@@ -7,7 +7,7 @@ import {ElMessage} from 'element-plus';
 
 //1. 创建新的axios实例，
 const service = axios.create({
-    baseURL: process.env.VUE_APP_API_BASE_URL,
+    baseURL:"http://localhost:8080/api",
     timeout: 9 * 10000,
 })
 // 2.请求拦截器
