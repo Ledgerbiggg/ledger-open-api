@@ -2,9 +2,8 @@
 // 导入axios
 import axios from 'axios'
 // 使用element-ui Message做消息提醒
-import { ElMessage } from 'element-plus';
+import {ElMessage} from 'element-plus';
 
-import {useRouter} from 'vue-router'
 
 //1. 创建新的axios实例，
 const service = axios.create({
@@ -40,8 +39,7 @@ service.interceptors.response.use(response => {
     //接收到响应数据并成功后的一些共有的处理，关闭loading等
     let token = response.headers.get('Authorization');
     let Role = response.headers.get('Role');
-    const router = useRouter()
-    console.log("token",token)
+    console.log("token", token)
     if (token) {
         window.localStorage.setItem('token', token);
     }
@@ -50,9 +48,9 @@ service.interceptors.response.use(response => {
     }
     if (response.data.code === 403) {
         ElMessage.error(response.data.msg)
-        router.push("/login").catch(e => { console.log(e) })
+        window.open("/login", "_self");
     }
-    if(response.data.code === 401 || response.data.code === 500){
+    if (response.data.code === 401 || response.data.code === 500) {
         ElMessage.error(response.data.data)
     }
     return response

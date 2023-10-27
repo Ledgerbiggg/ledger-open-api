@@ -19,6 +19,11 @@ const routes = [
         name: 'Main',
         children: [
             {
+                path: '/test/testWs', // 子路由的路径，会被追加到父路由路径后面，例如：/child1
+                component: () => import('@/test/TestWs.vue'), // 子路由的组件
+                name: 'testWs', // 子路由的名称
+            },
+            {
                 path: '/welcome', // 子路由的路径，会被追加到父路由路径后面，例如：/child1
                 component: () => import('@/page/ContentText.vue'), // 子路由的组件
                 name: 'Welcome' // 子路由的名称
