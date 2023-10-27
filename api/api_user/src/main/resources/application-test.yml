@@ -1,0 +1,17 @@
+# 测试环境
+
+spring:
+  cloud:
+    nacos:
+      discovery:
+        namespace: 791221eb-5fd5-4991-98c6-31bb74421209
+
+
+mybatis-plus:
+  configuration:
+    # 配置 MyBatis-Plus 的日志实现为 org.apache.ibatis.logging.stdout.StdOutImpl
+    log-impl: org.apache.ibatis.logging.nologging.NoLoggingImpl
+
+sys:
+  # 文件路径 示例（ Windows配置D:/attach/data/uploadPath，Linux配置 /home/data/uploadPath）
+  profile: /home/data/uploadPath
