@@ -16,9 +16,13 @@ module.exports = defineConfig({
     }
   },
   //生产环境去除控制台console.log的打印
-  configureWebpack: (config) => {
+  configureWebpack: config => {
     if (process.env.NODE_ENV === 'production') {
-      config.optimization.minimizer[0].options.terserOptions.compress.drop_console = true
+      config.optimization.minimizer[0].options.terserOptions = {
+        compress: {
+          drop_console: true
+        }
+      };
     }
   },
   css: {

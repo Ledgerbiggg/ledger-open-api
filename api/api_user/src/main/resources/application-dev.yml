@@ -4,7 +4,7 @@ spring:
   cloud:
     nacos:
       discovery:
-        namespace: 36d3a2be-c57e-4132-9a86-ec0ae40fd15e
+        namespace: 81ae9a71-0a21-4992-9be9-7b145c5fa604
 
 
 mybatis-plus:

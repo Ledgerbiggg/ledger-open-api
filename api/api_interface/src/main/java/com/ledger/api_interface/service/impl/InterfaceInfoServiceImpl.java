@@ -101,6 +101,7 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
         LambdaQueryWrapper<InterfaceInfo> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(InterfaceInfo::getStatus, 1);
         wrapper.eq(InterfaceInfo::getIs_delete, 0);
+        wrapper.eq(InterfaceInfo::getStatus,1);
         wrapper.like(StrUtil.isNotBlank(search), InterfaceInfo::getName, search);
         wrapper.like(StrUtil.isNotBlank(search), InterfaceInfo::getDescription, search);
         wrapper.orderByDesc(InterfaceInfo::getCall_count);
