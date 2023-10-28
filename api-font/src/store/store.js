@@ -23,6 +23,8 @@ export default createStore({
             uploadAvatar: "http://60.204.241.30/api/user/uploadAvatar",
             //上传文件地址
             uploadFile: "http://60.204.241.30/api/interfaceInfo/uploadFile",
+            //上传文件地址
+            wsLink: process.env.VUE_APP_API_WS_URL,
         },
         //接口历史结果弹窗
         showResultDialog: false,

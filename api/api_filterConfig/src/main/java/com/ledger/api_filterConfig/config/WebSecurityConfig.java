@@ -80,6 +80,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 "/swagger-resources",//用来获取api-docs的URI
                 "/swagger-resources/configuration/security",//安全选项
                 "/swagger-ui.html",
+                "/ws/**",
                 "/doc.html",
                 "/user/captcha",
                 "/user/login",

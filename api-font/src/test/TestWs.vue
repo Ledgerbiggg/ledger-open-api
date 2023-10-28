@@ -6,26 +6,32 @@
 </template>
 <script setup>
 import {ref} from "vue";
+import tokenUtil from "@/js/tokenUtil";
 
 const msg = ref('')
 
-// 创建WebSocket连接
-const socket = new WebSocket("ws://localhost:9999/websocket/testWs"); // 替换成你要连接的WebSocket服务器地址
+const wsLink = process.env.VUE_APP_API_WS_URL
 
-// 监听连接打开事件
+console.log(wsLink)
+
+const socket = new WebSocket(`${wsLink}${tokenUtil.getToken()}`);
+
 socket.addEventListener("open", (event) => {
   console.log(event, "WebSocket连接已打开");
-  // 在连接成功后发送消息
-  socket.send("Hello, WebSocket!");
 });
 
-// 监听接收消息事件
 socket.addEventListener("message", (event) => {
   const receivedData = event.data;
-  console.log("接收到消息: " + receivedData);
+  let parse = JSON.parse(receivedData);
+
+  console.log("接收到消息: " , parse);
+
+
+
+
+
 });
 
-// 监听连接关闭事件
 socket.addEventListener("close", (event) => {
   if (event.wasClean) {
     console.log("WebSocket连接已关闭");
@@ -34,15 +40,19 @@ socket.addEventListener("close", (event) => {
   }
 });
 
-// 监听连接错误事件
 socket.addEventListener("error", (event) => {
   console.error(event, "WebSocket连接出现错误");
 });
 
 
+
 const sendMsg = () => {
   msg.value=""
-  socket.send(msg.value);
+  // let data={
+  //   message:msg.value,
+  //   toName:"kk"
+  // }
+  // socket.send(JSON.stringify(data));
 }
 
 
