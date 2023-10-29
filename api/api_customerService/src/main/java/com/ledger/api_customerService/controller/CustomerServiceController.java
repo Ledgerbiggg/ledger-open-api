@@ -31,7 +31,6 @@ public class CustomerServiceController {
 
     @PostMapping("/feign/addASession")
     public void addASession(@RequestBody SessionInfo sessionInfo) {
-
         sessionInfoService.save(sessionInfo);
     }
 
