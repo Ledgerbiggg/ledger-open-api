@@ -81,6 +81,7 @@ const getMySeesion = () => {
   })
 }
 const sendMessage = async () => {
+  if(!msg.value) return
   ws.sendMsg(msg.value, "kk")
   conversation.value.push({
     username: "",

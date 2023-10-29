@@ -144,6 +144,7 @@ const search = () => {
   console.log(name.value);
 }
 const sendMessage=async () => {
+  if(!message.value) return
   ws.sendMsg(message.value, title.value)
   let value = message.value;
   conversation.value[title.value].push({
