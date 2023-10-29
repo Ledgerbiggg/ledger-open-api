@@ -78,6 +78,10 @@ export default createStore({
         requestParameters:[],
         //添加响应参数
         responseParameters:[],
+        //展示客服聊天
+        showKeFuChat:false,
+        //用户头像
+        userIcon:""
 
     },
     mutations: {

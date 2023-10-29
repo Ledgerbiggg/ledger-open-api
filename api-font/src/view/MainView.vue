@@ -32,7 +32,11 @@
       <router-view>
       </router-view>
     </div>
+    <DialogDraggableKeFu>
+    </DialogDraggableKeFu>
+  <div class="kefu" @click="showKeFu=store.state.showKeFuChat=true">
 
+  </div>
   </div>
 </template>
 <script setup>
@@ -41,9 +45,9 @@ import {onMounted, ref} from 'vue';
 import {useStore} from "vuex";
 import http from "@/js/http";
 import uploadUtil from "@/js/uploadUtil";
-
+import DialogDraggableKeFu from "@/components/dialog/DialogDraggableKeFu.vue";
 const role = ref("")
-
+const showKeFu = ref(false)
 const optionList = ref([
   {
     router: "/welcome",
@@ -75,6 +79,12 @@ const optionList = ref([
     componentName: "Avatar",
     tag: ["admin"],
   },
+  {
+    router: "/admin/customerManager",
+    text: "客服管理",
+    componentName: "ChatDotRound",
+    tag: ["admin"],
+  },
 ])
 let store = useStore();
 const docLink = store.state.linkList.docLink
@@ -88,6 +98,7 @@ const getUserIcon=()=>{
   http.get("/user/getUserIcon").then(async res => {
     if (res.data.code === 200) {
       imageUrl.value = await uploadUtil.upload(res.data.data);
+      store.state.userIcon=imageUrl.value
     }
   })
 }
@@ -96,7 +107,6 @@ const initRole=()=>{
   store.commit('setRole', item);
   role.value = item
 }
-
 
 
 const goRouter = (path) => {
@@ -211,5 +221,16 @@ const goRouter = (path) => {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+.kefu{
+  position: fixed;
+  width: 80px;
+  height: 80px;
+  top: 93%;
+  left: 95%;
+  transform: translate(-50%, -50%);
+  background-image: url("@/assets/img/kefu.jpg");
+  background-size: contain;
+  border-radius: 50%;
 }
 </style>

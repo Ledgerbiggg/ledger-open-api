@@ -14,5 +14,6 @@ public class Message {
     private String fromName;
     private String message;
     private String toName;
+    private String formatDt;
 
 }

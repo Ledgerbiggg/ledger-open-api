@@ -7,6 +7,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 public class JwtUtil {
@@ -99,6 +100,16 @@ public class JwtUtil {
         return createJwt(claimsFromToken, secret, claimsFromToken.getSubject(),Calendar.HOUR,30);
     }
 
+    public static String getClaimKeyUsernameFromRequest(HttpServletRequest request) {
+        String header = request.getHeader("Authorization");
+        String token = header.replace("Bearer ", "");
+        if (validateJwt(token, "ledger")) {
+            return getUserNameFromToken(token, "ledger");
+        }else {
+            return null;
+        }
+    }
+
     /**
      * 从token中获取负载
      * @param jwtToken token
@@ -115,6 +126,8 @@ public class JwtUtil {
             throw new RuntimeException(e);
         }
     }
+
+
 
 
 }

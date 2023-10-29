@@ -45,7 +45,14 @@ spring:
           uri: lb://api-order # 路由的目标地址 http就是固定地址
           predicates:
             - Path=/api/order/** # 这个是匹配规则，只要以/user/开头就会符合要求
-
+        - id: session-service
+          uri: lb://api-customerService # 路由的目标地址 http就是固定地址
+          predicates:
+            - Path=/api/customerService/** # 这个是匹配规则，只要以/user/开头就会符合要求
+        - id: api-ws
+          uri: lb://api-ws # 路由的目标地址 http就是固定地址
+          predicates:
+            - Path=/api/ws/** # 这个是匹配规则，只要以/user/开头就会符合要求
       default-filters:
         - RewritePath=/api/(?<segment>.*), /$\{segment} # 默认的过滤器,将所有的请求的/api去掉
   servlet:
