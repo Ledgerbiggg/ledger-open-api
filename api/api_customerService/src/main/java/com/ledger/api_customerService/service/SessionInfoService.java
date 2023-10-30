@@ -20,4 +20,5 @@ public interface SessionInfoService extends IService<SessionInfo> {
 
     Result<List<SessionInfoDTO>> getMySession(HttpServletRequest request);
 
+    void addASession(SessionInfo sessionInfo);
 }

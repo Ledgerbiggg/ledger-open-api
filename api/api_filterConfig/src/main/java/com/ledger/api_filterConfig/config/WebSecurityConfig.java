@@ -90,7 +90,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 "/order/pay",
                 "/order/notify",
                 "/interfaceInfo/externalCall",
-                "/interfaceInfo/getFile"
+                "/interfaceInfo/getFile",
+                "/customerService/feign/addASession"
                 );
 
     }

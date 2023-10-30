@@ -7,13 +7,16 @@ import com.ledger.api_common.Exception.KnowException;
 import com.ledger.api_common.response.Result;
 import com.ledger.api_common.util.JwtUtil;
 import com.ledger.api_common.util.LocalDateTimeUtil;
+import com.ledger.api_filterConfig.feign.userInfo.UserInfoService;
 import com.ledger.api_filterConfig.model.domain.sessionInfo.SessionInfo;
 import com.ledger.api_customerService.model.dto.SessionInfoDTO;
 import com.ledger.api_customerService.model.vo.SessionInfoVo;
 import com.ledger.api_customerService.service.SessionInfoService;
 import com.ledger.api_customerService.mapper.SessionInfoMapper;
+import com.ledger.api_filterConfig.model.domain.userInfo.UserInfo;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +30,10 @@ import java.util.stream.Collectors;
 @Service
 public class SessionInfoServiceImpl extends ServiceImpl<SessionInfoMapper, SessionInfo>
         implements SessionInfoService {
+
+
+    @Resource
+    private UserInfoService userInfoService;
 
     @Override
     public Result<SessionInfoVo> getAllSession() {
@@ -74,6 +81,15 @@ public class SessionInfoServiceImpl extends ServiceImpl<SessionInfoMapper, Sessi
         }).collect(Collectors.toList());
 
         return Result.success(collect);
+    }
+
+    @Override
+    public void addASession(SessionInfo sessionInfo) {
+        String userId = sessionInfo.getUser_id();
+        UserInfo userByUsername = userInfoService.getUserByUsername(userId);
+        String avatar = userByUsername.getAvatar();
+        sessionInfo.setUser_icon(avatar);
+        save(sessionInfo);
     }
 }
 

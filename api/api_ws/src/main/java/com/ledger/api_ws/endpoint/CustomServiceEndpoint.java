@@ -10,6 +10,7 @@ import com.ledger.api_filterConfig.model.domain.sessionInfo.SessionInfo;
 import com.ledger.api_ws.domain.Message;
 import com.ledger.api_ws.enums.FromNameEnum;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -29,13 +30,16 @@ import java.util.concurrent.ConcurrentHashMap;
 // 每次创建一个连接就会new出来一个EndPoint
 public class CustomServiceEndpoint {
 
-    @Resource
-    private CustomerService customerService;
+    private static CustomerService customerService;
 
     private static final Map<String, Session> SESSION_MAP = new ConcurrentHashMap<>();
 
     private static Session kk = null;
 
+    @Autowired
+    public void setCustomerService(CustomerService c) {
+        CustomServiceEndpoint.customerService = c;
+    }
 
     @OnOpen
     public void onOpen(Session session, @PathParam("token") String token) {
@@ -129,6 +133,7 @@ public class CustomServiceEndpoint {
 
     @OnError
     public void onError(Throwable error) {
+        error.printStackTrace();
         System.out.println("onError......" + error.getMessage());
     }
 

@@ -19,6 +19,7 @@
         <module>api_order</module>
         <module>api_filterConfig</module>
         <module>api_ws</module>
+        <module>api_customerService</module>
     </modules>
 
     <groupId>com.ledger</groupId>
