@@ -3,6 +3,8 @@ package com.ledger.api_customerService.mapper;
 import com.ledger.api_filterConfig.model.domain.sessionInfo.SessionInfo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
+import java.util.List;
+
 /**
 * @author 22866
 * @description 针对表【session_info】的数据库操作Mapper

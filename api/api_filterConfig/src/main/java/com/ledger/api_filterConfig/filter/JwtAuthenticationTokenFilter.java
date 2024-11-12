@@ -6,6 +6,7 @@ import com.ledger.api_filterConfig.feign.userInfo.UserInfoService;
 import com.ledger.api_filterConfig.model.domain.userInfo.SecurityUser;
 import com.ledger.api_filterConfig.model.domain.userInfo.UserInfo;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -21,6 +22,7 @@ import java.io.IOException;
 import java.util.List;
 
 @Component
+@Order(1)
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     @Resource
     private UserInfoService userInfoService;

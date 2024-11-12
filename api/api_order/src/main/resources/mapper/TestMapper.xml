@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ledger.api_order.mapper.TestMapper">
+
+    <resultMap id="BaseResultMap" type="com.ledger.api_order.model.Test">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="username" column="username" jdbcType="VARCHAR"/>
+            <result property="password" column="password" jdbcType="VARCHAR"/>
+            <result property="email" column="email" jdbcType="VARCHAR"/>
+            <result property="age" column="age" jdbcType="INTEGER"/>
+            <result property="height" column="height" jdbcType="DECIMAL"/>
+            <result property="balance" column="balance" jdbcType="FLOAT"/>
+            <result property="createdAt" column="created_at" jdbcType="TIMESTAMP"/>
+            <result property="updatedAt" column="updated_at" jdbcType="TIMESTAMP"/>
+            <result property="isActive" column="is_active" jdbcType="TINYINT"/>
+            <result property="lastLogin" column="last_login" jdbcType="DATE"/>
+            <result property="country" column="country" jdbcType="CHAR"/>
+            <result property="phoneNumber" column="phone_number" jdbcType="VARCHAR"/>
+            <result property="salary" column="salary" jdbcType="DOUBLE"/>
+            <result property="address" column="address" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,username,password,
+        email,age,height,
+        balance,created_at,updated_at,
+        is_active,last_login,country,
+        phone_number,salary,address,
+        profile_picture
+    </sql>
+</mapper>

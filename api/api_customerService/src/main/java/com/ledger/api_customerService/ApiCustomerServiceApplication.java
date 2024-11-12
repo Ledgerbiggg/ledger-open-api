@@ -13,9 +13,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableFeignClients(basePackages = "com.ledger.api_filterConfig.feign")//方法2
 @SpringBootApplication
 public class ApiCustomerServiceApplication {
-
 	public static void main(String[] args) {
 		SpringApplication.run(ApiCustomerServiceApplication.class, args);
 	}
-
 }

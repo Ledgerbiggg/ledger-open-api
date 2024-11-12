@@ -13,9 +13,9 @@
         </el-icon>
       </el-tooltip>
         </span>
-<!--        <span class="goPayment">-->
-<!--          <el-button type="primary" :icon="Edit" circle @click="edit"/>-->
-<!--      </span>-->
+        <!--        <span class="goPayment">-->
+        <!--          <el-button type="primary" :icon="Edit" circle @click="edit"/>-->
+        <!--      </span>-->
       </div>
       <div class="avatarBox">
         <el-upload
@@ -102,6 +102,7 @@ const handleAvatarSuccess = async (response, /*uploadFile*/) => {
 
 // 获取token上传
 const beforeAvatarUpload = (rawFile) => {
+  console.log("store.state.linkList.uploadAvatar", store.state.linkList.uploadAvatar)
   console.log("rawFile", rawFile.type)
   if (rawFile.type !== 'image/jpeg' && rawFile.type !== 'image/png' && rawFile.type !== 'image/gif') {
     ElMessage.error('请上传 jpg,png,gif 格式的图片!')

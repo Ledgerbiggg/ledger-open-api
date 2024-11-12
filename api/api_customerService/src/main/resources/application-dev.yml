@@ -14,5 +14,5 @@ mybatis-plus:
 
 sys:
   # 文件路径 示例（ Windows配置D:/attach/data/uploadPath，Linux配置 /home/data/uploadPath）
-  profile: C:\D\image\
+  profile: C:\project\open-api\image\
 

@@ -20,9 +20,11 @@ export default createStore({
             //用户协议
             userAgreement: "https://www.baidu.com",
             //上传文件地址
-            uploadAvatar: "http://60.204.241.30/api/user/uploadAvatar",
+            uploadAvatar: "http://localhost:8080/api/user/uploadAvatar",
+            // uploadAvatar: "http://10.147.18.26/api/user/uploadAvatar",
             //上传文件地址
-            uploadFile: "http://60.204.241.30/api/interfaceInfo/uploadFile",
+            uploadFile: "http://localhost:8080/api/interfaceInfo/uploadFile",
+            // uploadFile: "http://10.147.18.26/api/interfaceInfo/uploadFile",
             //上传文件地址
             wsLink: process.env.VUE_APP_API_WS_URL,
         },

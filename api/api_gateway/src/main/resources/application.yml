@@ -9,13 +9,13 @@ spring:
     active: @profiles.active@
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver  # MySQL数据库驱动类名
-    url: jdbc:mysql://60.204.241.30:3306/open-api?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC # MySQL数据库连接URL，根据实际情况修改主机名和端口号
+    url: jdbc:mysql://10.147.18.26:3306/open-api?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC # MySQL数据库连接URL，根据实际情况修改主机名和端口号
     username: root  # MySQL数据库用户名
     password: biaoge666  # MySQL数据库密码
   cloud:
     nacos:
       # nacos地址
-      server-addr: 106.54.9.19:8848
+      server-addr: 10.147.18.26:8848
     gateway:
       globalcors:
         add-to-simple-url-handler-mapping: true # 解决options请求被拦截问题

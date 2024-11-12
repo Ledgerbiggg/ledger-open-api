@@ -1,9 +1,3 @@
-
-
-
-
-
-
 jwt:
   # JWT存储的请求头
   tokenHeader: Authorization

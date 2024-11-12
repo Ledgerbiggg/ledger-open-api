@@ -71,7 +71,7 @@
               :interfaceId="interfaceDetail.id"
           />
         </el-tab-pane>
-        <el-tab-pane label="示例代码" name="example">
+        <el-tab-pane label="说明" name="example">
           <APIExample/>
         </el-tab-pane>
       </el-tabs>
